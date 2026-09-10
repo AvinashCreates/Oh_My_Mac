@@ -74,7 +74,7 @@
       align-items: center;
       justify-content: center;
       background: #020617;
-      transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), filter 1.2s ease;
+      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), filter 0.35s ease;
     }
 
     .boot-overlay.fade-out {
@@ -156,7 +156,7 @@
       backdrop-filter: blur(28px) saturate(160%);
       -webkit-backdrop-filter: blur(28px) saturate(160%);
       background: rgba(10, 15, 25, 0.35);
-      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), filter 0.8s ease;
+      transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease;
     }
 
     .lockscreen-overlay.unlocked {
@@ -477,13 +477,13 @@
       -webkit-backdrop-filter: blur(35px) saturate(190%);
       z-index: 10;
       transform-origin: center center;
-      transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
-                  opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-                  top 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-                  left 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-                  width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-                  height 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-                  border-radius 0.3s ease,
+      transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1),
+          opacity 0.12s cubic-bezier(0.16, 1, 0.3, 1),
+          top 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+          left 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+          width 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+          height 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+          border-radius 0.16s ease,
                   box-shadow 0.2s ease;
     }
 
@@ -495,7 +495,7 @@
 
     /* Window lifecycle state classes */
     .win-opening {
-      animation: winOpenScale 0.34s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation: winOpenScale 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
     @keyframes winOpenScale {
@@ -527,13 +527,13 @@
     /* Genie / scale minimize transition */
     .win-minimizing {
       pointer-events: none;
-      transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.2, 1), opacity 0.35s ease !important;
+      transition: transform 0.2s cubic-bezier(0.2, 0.9, 0.2, 1), opacity 0.18s ease !important;
       transform: translateY(280px) scale(0.08) !important;
       opacity: 0 !important;
     }
 
     .win-unminimizing {
-      animation: winUnminimize 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation: winUnminimize 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
     @keyframes winUnminimize {
@@ -746,7 +746,7 @@
 <!-- Center User Login Avatar & Password Box -->
 <div class="flex flex-col items-center mb-8" onclick="event.stopPropagation()">
 <div class="lock-avatar-ring mb-3.5 relative group cursor-pointer" onclick="shakeLockScreen()">
-<img alt="User Avatar" class="w-full h-full rounded-full object-cover shadow-inner" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcwQS5EYygENpT9C3PAh1jSR4JBY5JMwpun6c7qmz2v2rXVo-iqSioh2qpqtP8B3qWre7UN8t-YD33-tbYL09SqetPcEwwV25ENn7xZHYDu0Z3R538Krca4WCHUH_kmcqXl7As535KkdsxUz53Hi7oOvq24nL8bleCqCsWOwbWEYNICzYgldbDIblt14WRlAWd0Fgg7aT8CbsGPNFCbNhqRJvsPjdFG2sn3Eztv6hxyTFiNhrtOV3K"/>
+<img alt="User Avatar" data-profile-photo="true" class="w-full h-full rounded-full object-cover shadow-inner" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcwQS5EYygENpT9C3PAh1jSR4JBY5JMwpun6c7qmz2v2rXVo-iqSioh2qpqtP8B3qWre7UN8t-YD33-tbYL09SqetPcEwwV25ENn7xZHYDu0Z3R538Krca4WCHUH_kmcqXl7As535KkdsxUz53Hi7oOvq24nL8bleCqCsWOwbWEYNICzYgldbDIblt14WRlAWd0Fgg7aT8CbsGPNFCbNhqRJvsPjdFG2sn3Eztv6hxyTFiNhrtOV3K"/>
 <div class="absolute inset-0 rounded-full bg-black/10 group-hover:bg-transparent transition"></div>
 </div>
 <h1 class="text-white font-medium text-lg tracking-tight mb-3 drop-shadow-md">Pamarthi Avinash</h1>
@@ -876,6 +876,10 @@
 <span>New Folder</span>
 <span class="menu-shortcut">⇧⌘N</span>
 </div>
+<div class="menu-row" onclick="createBrowserFile('file')">
+<span>New File</span>
+<span class="menu-shortcut">⌘N</span>
+</div>
 <div class="menu-row">
 <span>New Smart Folder</span>
 <span class="menu-shortcut">⌥⌘N</span>
@@ -884,7 +888,7 @@
 <span>New Tab</span>
 <span class="menu-shortcut">⌘T</span>
 </div>
-<div class="menu-row">
+<div class="menu-row" onclick="chooseLocalDirectory()">
 <span>Open</span>
 <span class="menu-shortcut">⌘O</span>
 </div>
@@ -1171,14 +1175,14 @@
 <span>Display Brightness</span>
 <i class="fa-solid fa-sun text-xs"></i>
 </div>
-<input class="w-full accent-white cursor-pointer h-1.5 bg-white/20 rounded-lg" max="100" min="30" type="range" value="95"/>
+<input class="w-full accent-white cursor-pointer h-1.5 bg-white/20 rounded-lg" id="brightnessControl" max="100" min="30" oninput="setDisplayBrightness(this.value)" type="range" value="95"/>
 </div>
 <div>
 <div class="flex justify-between text-[11px] text-white/70 mb-1">
 <span>Sound Volume</span>
 <i class="fa-solid fa-volume-high text-xs"></i>
 </div>
-<input class="w-full accent-white cursor-pointer h-1.5 bg-white/20 rounded-lg" max="100" min="0" type="range" value="75"/>
+<input class="w-full accent-white cursor-pointer h-1.5 bg-white/20 rounded-lg" id="volumeControl" max="100" min="0" oninput="setPageVolume(this.value)" type="range" value="75"/>
 </div>
 </div>
 </div>
@@ -1405,7 +1409,8 @@
 <div class="win-btn win-min" onclick="minimizeWindow('systemAppWindow')"><i class="fa-solid fa-minus opacity-0 hover:opacity-100 text-[7px]"></i></div>
 <div class="win-btn win-max" onclick="maximizeWindow('systemAppWindow')"><i class="fa-solid fa-expand opacity-0 hover:opacity-100 text-[6px]"></i></div>
 </div>
-<div class="win-title" id="systemAppTitle">Application</div>
+<div class="win-title !justify-start pl-40" id="systemAppTitle">Application</div>
+<div class="absolute right-3 top-1 flex items-center gap-1" id="systemAppTabs"></div>
 </div>
 <div class="h-[calc(100%-38px)] overflow-y-auto bg-slate-900/95 text-white p-5" id="systemAppContent"></div>
 </div>
@@ -1571,7 +1576,7 @@
           clearInterval(bootInterval);
           if (elBar) elBar.style.width = '100%';
           if (elStatus) elStatus.innerHTML = `<span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Ready`;
-          setTimeout(completeBootSequence, 650);
+          setTimeout(completeBootSequence, 180);
         } else {
           if (elBar) elBar.style.width = bootProgress + '%';
         }
@@ -1605,7 +1610,7 @@
           bootEl.style.display = 'none';
           bootEl.style.transitionDuration = '';
           focusLockInput();
-        }, skipAnimation ? 220 : 1100);
+        }, skipAnimation ? 100 : 320);
       }
     }
 
@@ -1663,6 +1668,12 @@
       const lockOverlay = document.getElementById('lockScreen');
       const input = document.getElementById('lockPasswordInput');
 
+      if (!input || input.value !== 'avi') {
+        shakeLockScreen();
+        if (input) input.value = '';
+        return;
+      }
+
       // Authentic unlock animation: smooth zoom & dissolve into desktop
       if (lockOverlay) {
         lockOverlay.classList.add('unlocked');
@@ -1673,9 +1684,9 @@
           const term = document.getElementById('terminalWindow');
           if (term && !term.classList.contains('hidden')) {
             term.classList.add('win-opening');
-            setTimeout(() => term.classList.remove('win-opening'), 350);
+            setTimeout(() => term.classList.remove('win-opening'), 160);
           }
-        }, 800);
+        }, 300);
       }
     }
 
@@ -1690,7 +1701,7 @@
       const input = document.getElementById('lockPasswordInput');
       if (input) {
         input.value = '';
-        setTimeout(() => input.focus(), 300);
+        setTimeout(() => input.focus(), 80);
       }
     }
 
@@ -1716,7 +1727,14 @@
 
     function shutdownMac() {
       if (confirm("Are you sure you want to shut down macOS Sonoma?")) {
-        rebootSequence();
+        const bootEl = document.getElementById('bootScreen');
+        const lockOverlay = document.getElementById('lockScreen');
+        if (lockOverlay) lockOverlay.style.display = 'none';
+        if (bootEl) {
+          bootEl.style.display = 'flex';
+          bootEl.classList.remove('fade-out');
+          bootEl.innerHTML = '<div class="relative z-10 text-white/80 text-sm font-mono">System shut down. Reload this page to start macOS.</div>';
+        }
       }
     }
 
@@ -1761,7 +1779,7 @@
           const dot = document.getElementById('finderDockDot');
           if (dot) dot.style.opacity = '0.3';
         }
-      }, 200);
+      }, 120);
     }
 
     function minimizeWindow(id) {
@@ -1774,7 +1792,7 @@
         win.classList.add('hidden');
         win.classList.remove('win-minimizing');
         win.dataset.minimized = "true";
-      }, 380);
+      }, 180);
     }
 
     function unminimizeWindow(id) {
@@ -1788,7 +1806,7 @@
 
       setTimeout(() => {
         win.classList.remove('win-unminimizing');
-      }, 380);
+      }, 180);
     }
 
     function handleDockClick(appType, windowId, event) {
@@ -1822,7 +1840,7 @@
 
       setTimeout(() => {
         win.classList.remove('win-opening');
-      }, 350);
+      }, 160);
 
       if (id === 'finderExplorerWindow') {
         const dot = document.getElementById('finderDockDot');
@@ -1836,6 +1854,10 @@
       const win = document.getElementById(id);
       if (!win) return;
       bringToFront(id);
+
+      if (id === 'systemAppWindow' && !document.fullscreenElement && win.requestFullscreen) {
+        win.requestFullscreen().catch(() => {});
+      }
 
       if (!windowMaxStates[id]) {
         // Save initial geometry
@@ -1861,6 +1883,20 @@
         delete windowMaxStates[id];
       }
     }
+
+    document.addEventListener('fullscreenchange', () => {
+      const win = document.getElementById('systemAppWindow');
+      renderSystemAppTabs();
+      if (!document.fullscreenElement && win && windowMaxStates.systemAppWindow) {
+        const state = windowMaxStates.systemAppWindow;
+        win.style.top = state.top;
+        win.style.left = state.left;
+        win.style.width = state.width;
+        win.style.height = state.height;
+        win.style.borderRadius = state.borderRadius;
+        delete windowMaxStates.systemAppWindow;
+      }
+    });
 
     function minimizeActiveWindow() {
       const active = document.querySelector('.mac-window.active-window:not(.hidden)');
@@ -1938,7 +1974,7 @@
       el.classList.add('bouncing');
       setTimeout(() => {
         el.classList.remove('bouncing');
-      }, 1200);
+      }, 500);
     }
 
     function openSafariDemo(el) {
@@ -1951,6 +1987,287 @@
         hist.appendChild(item);
       }
     }
+
+    const appWindowTemplates = {
+      launchpad: ['Launchpad', '<div class="grid grid-cols-4 gap-4 text-center text-xs"><button class="p-4 rounded-xl bg-white/10 hover:bg-white/20" onclick="openFinderWindow()"><i class="fa-solid fa-folder-open text-2xl mb-2"></i><br>Finder</button><button class="p-4 rounded-xl bg-white/10 hover:bg-white/20" onclick="toggleApp(\'terminalWindow\')"><i class="fa-solid fa-terminal text-2xl mb-2"></i><br>Terminal</button><button class="p-4 rounded-xl bg-white/10 hover:bg-white/20" onclick="openRealApp(\'portfolio\')"><i class="fa-solid fa-id-card text-2xl mb-2"></i><br>Portfolio</button><button class="p-4 rounded-xl bg-white/10 hover:bg-white/20" onclick="openRealApp(\'contact\')"><i class="fa-solid fa-address-book text-2xl mb-2"></i><br>Contact</button><button class="p-4 rounded-xl bg-white/10 hover:bg-white/20" onclick="openRealApp(\'settings\')"><i class="fa-solid fa-gear text-2xl mb-2"></i><br>Settings</button><button class="p-4 rounded-xl bg-white/10 hover:bg-white/20" onclick="openRealApp(\'calendar\')"><i class="fa-solid fa-calendar text-2xl mb-2"></i><br>Calendar</button></div>'],
+      portfolio: ['Portfolio', '<div class="space-y-5"><div><p class="text-cyan-300 text-xs uppercase tracking-[0.25em]">Pamarthi Avinash</p><h1 class="text-3xl font-semibold mt-2">Fullstack Engineer · AI Enthusiast</h1><p class="text-white/65 mt-2 max-w-xl">I build responsive, thoughtful interfaces and practical products with modern web technologies.</p></div><div class="grid grid-cols-2 gap-3"><div class="p-4 rounded-xl bg-white/10"><h2 class="font-semibold">Projects</h2><p class="text-white/60 text-sm mt-1">Interactive Apple Web OS, portfolio systems, and AI-powered products.</p></div><div class="p-4 rounded-xl bg-white/10"><h2 class="font-semibold">Stack</h2><p class="text-white/60 text-sm mt-1">React, Next.js, TypeScript, TailwindCSS, Node.js, Python, GraphQL.</p></div></div><button class="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-400" onclick="openRealApp(\'contact\')">View Contact & Socials</button></div>'],
+      contact: ['Contact & Socials', '<div class="space-y-4"><h1 class="text-2xl font-semibold">Let’s build something useful.</h1><a class="flex items-center gap-3 p-3 rounded-lg bg-white/10 hover:bg-white/20" href="mailto:avinashcreates@gmail.com"><i class="fa-solid fa-envelope text-red-300 w-5"></i><span>Email: avinashcreates@gmail.com</span></a><div class="grid grid-cols-2 gap-3"><a class="p-4 rounded-xl bg-white/10 hover:bg-white/20" href="https://github.com/avinashcreates" target="_blank" rel="noreferrer"><i class="fa-brands fa-github text-2xl"></i><span class="block mt-2 text-sm">GitHub</span></a><a class="p-4 rounded-xl bg-white/10 hover:bg-white/20" href="https://www.linkedin.com/in/avinashpamarthi" target="_blank" rel="noreferrer"><i class="fa-brands fa-linkedin text-2xl text-sky-300"></i><span class="block mt-2 text-sm">LinkedIn</span></a><a class="p-4 rounded-xl bg-white/10 hover:bg-white/20" href="https://www.instagram.com/avinashcreates" target="_blank" rel="noreferrer"><i class="fa-brands fa-instagram text-2xl text-pink-300"></i><span class="block mt-2 text-sm">Instagram</span></a><a class="p-4 rounded-xl bg-white/10 hover:bg-white/20" href="https://leetcode.com/avinashcreates" target="_blank" rel="noreferrer"><i class="fa-solid fa-code text-2xl text-amber-300"></i><span class="block mt-2 text-sm">LeetCode</span></a></div></div>'],
+      calendar: ['Calendar', '<div class="flex flex-col h-full"><div class="flex items-center justify-between mb-4"><button class="px-3 py-1 rounded bg-white/10 hover:bg-white/20" onclick="changeCalendarMonth(-1)"><i class="fa-solid fa-chevron-left"></i></button><h2 class="text-lg" id="calendarMonthTitle"></h2><button class="px-3 py-1 rounded bg-white/10 hover:bg-white/20" onclick="changeCalendarMonth(1)"><i class="fa-solid fa-chevron-right"></i></button></div><div class="grid grid-cols-7 gap-1 text-center text-xs text-white/50 mb-1"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div><div class="grid grid-cols-7 gap-1 flex-1" id="calendarGrid"></div><button class="mt-4 self-end px-3 py-1.5 rounded bg-blue-500 hover:bg-blue-400 text-sm" onclick="addCalendarEvent()"><i class="fa-solid fa-plus mr-1"></i>Add Event</button></div>'],
+      music: ['Music', '<div class="text-center"><i class="fa-solid fa-music text-6xl text-pink-400"></i><h2 class="text-xl mt-4">Browser Music Player</h2><p class="text-white/60 text-sm mt-2">Choose a local audio file to play it here.</p><input class="mt-5 text-xs" type="file" accept="audio/*" onchange="playLocalAudio(this)"><audio class="w-full mt-5" id="localAudio" controls></audio></div>'],
+      settings: ['System Settings', '<div class="space-y-4"><section class="p-4 rounded-xl bg-white/10 border border-white/10"><div class="flex items-center gap-4"><img class="w-16 h-16 rounded-full object-cover border-2 border-white/30 shadow-lg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcwQS5EYygENpT9C3PAh1jSR4JBY5JMwpun6c7qmz2v2rXVo-iqSioh2qpqtP8B3qWre7UN8t-YD33-tbYL09SqetPcEwwV25ENn7xZHYDu0Z3R538Krca4WCHUH_kmcqXl7As535KkdsxUz53Hi7oOvq24nL8bleCqCsWOwbWEYNICzYgldbDIblt14WRlAWd0Fgg7aT8CbsGPNFCbNhqRJvsPjdFG2sn3Eztv6hxyTFiNhrtOV3K" alt="Pamarthi Avinash profile photo"><div><h2 class="text-xl font-semibold">Pamarthi Avinash</h2><p class="text-cyan-300 text-sm">Fullstack Engineer · AI Enthusiast</p><p class="text-white/55 text-xs mt-1">Vijayawada, India</p></div></div><div class="grid grid-cols-2 gap-2 mt-4 text-xs"><div class="p-2 rounded-lg bg-black/15"><span class="text-white/45 block">Email</span><span>avinashcreates@gmail.com</span></div><div class="p-2 rounded-lg bg-black/15"><span class="text-white/45 block">Focus</span><span>Web & AI products</span></div></div></section><div class="grid grid-cols-2 gap-3"><button class="p-3 rounded-lg bg-white/10 hover:bg-white/20 text-left" onclick="openRealApp(\'portfolio\')"><i class="fa-solid fa-id-card mr-2 text-cyan-300"></i>Portfolio</button><button class="p-3 rounded-lg bg-white/10 hover:bg-white/20 text-left" onclick="openRealApp(\'contact\')"><i class="fa-solid fa-address-book mr-2 text-pink-300"></i>Contact</button></div><div class="grid grid-cols-2 gap-3"><button class="p-3 rounded-lg bg-white/10 hover:bg-white/20 text-left" onclick="toggleWallpaperHue()"><i class="fa-solid fa-palette mr-2"></i>Change wallpaper</button><button class="p-3 rounded-lg bg-white/10 hover:bg-white/20 text-left" onclick="requestNotifications()"><i class="fa-solid fa-bell mr-2"></i>Notifications</button></div><div class="p-3 rounded-lg bg-white/10 text-sm text-white/70"><i class="fa-solid fa-circle-check text-emerald-300 mr-2"></i>Profile and desktop settings are saved in this browser.</div></div>'],
+      trash: ['Trash', '<div class="text-center text-white/70"><i class="fa-solid fa-trash-can text-5xl mb-4"></i><p id="trashStatus">Trash is empty.</p><button class="mt-5 px-4 py-2 rounded-lg bg-red-500/70 hover:bg-red-500" onclick="clearBrowserTrash()">Empty Trash</button></div>']
+    };
+    const systemAppTabOrder = [];
+    let activeSystemAppTab = '';
+
+    function renderSystemAppTabs() {
+      const tabs = document.getElementById('systemAppTabs');
+      if (!tabs) return;
+      tabs.style.display = document.fullscreenElement ? 'flex' : 'none';
+      tabs.innerHTML = systemAppTabOrder.map(app => `<button class="px-2 py-1 rounded text-[10px] ${app === activeSystemAppTab ? 'bg-white/20 text-white' : 'text-white/50 hover:text-white'}" onclick="openRealApp('${app}')">${app[0].toUpperCase() + app.slice(1)}</button>`).join('');
+    }
+
+    function openRealApp(app, dockItem) {
+      if (dockItem) bounceDockItem(dockItem);
+      if (app === 'safari') {
+        openSafariInWindow();
+        return;
+      }
+      if (app === 'maps') {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(position => {
+            const { latitude, longitude } = position.coords;
+            window.open(`https://www.google.com/maps/@${latitude},${longitude},15z`, '_blank', 'noopener,noreferrer');
+          }, () => window.open('https://www.google.com/maps', '_blank', 'noopener,noreferrer'));
+        } else window.open('https://www.google.com/maps', '_blank', 'noopener,noreferrer');
+        return;
+      }
+      const template = appWindowTemplates[app];
+      if (!template) return;
+      if (!systemAppTabOrder.includes(app)) systemAppTabOrder.push(app);
+      activeSystemAppTab = app;
+      renderSystemAppTabs();
+      const title = document.getElementById('systemAppTitle');
+      const content = document.getElementById('systemAppContent');
+      if (title) title.textContent = template[0];
+      if (content) content.innerHTML = template[1];
+      if (app === 'settings') ensureProfilePhotoControl(content);
+      openAppWithLifecycle('systemAppWindow');
+      renderSystemAppTabs();
+      if (app === 'calendar') renderCalendar();
+      if (app === 'trash') updateTrashStatus();
+    }
+
+    function ensureProfilePhotoControl(content) {
+      const profilePhoto = content.querySelector('img[alt="Pamarthi Avinash profile photo"]');
+      if (!profilePhoto || content.querySelector('#profilePhotoPicker')) return;
+      profilePhoto.dataset.profilePhoto = 'true';
+      const control = document.createElement('label');
+      control.id = 'profilePhotoPicker';
+      control.className = 'mt-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-blue-500/80 hover:bg-blue-400 cursor-pointer text-xs';
+      control.innerHTML = '<i class="fa-solid fa-camera"></i> Change profile photo<input class="hidden" type="file" accept="image/*">';
+      control.querySelector('input').addEventListener('change', event => changeProfilePhoto(event.target));
+      profilePhoto.closest('section').appendChild(control);
+      applySavedProfilePhoto();
+    }
+
+    function changeProfilePhoto(input) {
+      const file = input.files && input.files[0];
+      if (!file || !file.type.startsWith('image/')) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        localStorage.setItem('appleWebProfilePhoto', reader.result);
+        applySavedProfilePhoto();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function applySavedProfilePhoto() {
+      const savedPhoto = localStorage.getItem('appleWebProfilePhoto');
+      if (!savedPhoto) return;
+      document.querySelectorAll('[data-profile-photo="true"]').forEach(image => { image.src = savedPhoto; });
+    }
+
+    function updateRealCalendar() {
+      const now = new Date();
+      const day = document.getElementById('realCalendarDay');
+      const date = document.getElementById('realCalendarDate');
+      if (day) day.textContent = now.getDate();
+      if (date) date.textContent = now.toLocaleDateString(undefined, { weekday: 'long', month: 'long', year: 'numeric' });
+    }
+
+    let calendarMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+
+    function renderCalendar() {
+      const title = document.getElementById('calendarMonthTitle');
+      const grid = document.getElementById('calendarGrid');
+      if (!title || !grid) return;
+      const year = calendarMonth.getFullYear();
+      const month = calendarMonth.getMonth();
+      title.textContent = calendarMonth.toLocaleDateString(undefined, { month: 'long', year: 'numeric' });
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const today = new Date();
+      const events = JSON.parse(localStorage.getItem('appleWebCalendarEvents') || '{}');
+      grid.innerHTML = '';
+      for (let i = 0; i < firstDay; i++) grid.insertAdjacentHTML('beforeend', '<span></span>');
+      for (let day = 1; day <= daysInMonth; day++) {
+        const key = `${year}-${month + 1}-${day}`;
+        const isToday = today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
+        const event = events[key];
+        grid.insertAdjacentHTML('beforeend', `<button class="min-h-10 rounded-lg ${isToday ? 'bg-blue-500 text-white' : 'bg-white/5 hover:bg-white/15'} text-sm relative" onclick="addCalendarEvent(${day})">${day}${event ? '<span class="absolute bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-amber-300"></span>' : ''}</button>`);
+      }
+    }
+
+    function changeCalendarMonth(offset) {
+      calendarMonth = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() + offset, 1);
+      renderCalendar();
+    }
+
+    function addCalendarEvent(day = new Date().getDate()) {
+      const eventName = prompt('Event name:');
+      if (!eventName) return;
+      const key = `${calendarMonth.getFullYear()}-${calendarMonth.getMonth() + 1}-${day}`;
+      const events = JSON.parse(localStorage.getItem('appleWebCalendarEvents') || '{}');
+      events[key] = eventName;
+      localStorage.setItem('appleWebCalendarEvents', JSON.stringify(events));
+      renderCalendar();
+    }
+
+    function playLocalAudio(input) {
+      const audio = document.getElementById('localAudio');
+      if (audio && input.files[0]) {
+        audio.src = URL.createObjectURL(input.files[0]);
+        audio.volume = Number(localStorage.getItem('appleWebVolume') || 0.75);
+      }
+    }
+
+    function setDisplayBrightness(value) {
+      const brightness = Math.max(0.3, Number(value) / 100);
+      document.body.style.filter = `brightness(${brightness})`;
+      localStorage.setItem('appleWebBrightness', value);
+    }
+
+    function setPageVolume(value) {
+      const volume = Math.max(0, Math.min(1, Number(value) / 100));
+      document.querySelectorAll('audio, video').forEach(media => { media.volume = volume; });
+      localStorage.setItem('appleWebVolume', volume.toString());
+    }
+
+    function openSafariInWindow() {
+      const title = document.getElementById('systemAppTitle');
+      const content = document.getElementById('systemAppContent');
+      if (title) title.textContent = 'Safari';
+      if (!systemAppTabOrder.includes('safari')) systemAppTabOrder.push('safari');
+      activeSystemAppTab = 'safari';
+      renderSystemAppTabs();
+      if (content) content.innerHTML = `<div class="flex flex-col h-full gap-3">
+        <div class="flex items-center gap-2">
+          <button class="px-2 py-1 rounded bg-white/10 hover:bg-white/20" onclick="navigateSafari(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+          <button class="px-2 py-1 rounded bg-white/10 hover:bg-white/20" onclick="navigateSafari(1)"><i class="fa-solid fa-chevron-right"></i></button>
+          <form class="flex-1 flex gap-2" onsubmit="navigateSafariTo(event)">
+            <input id="safariAddress" class="flex-1 bg-black/30 border border-white/15 rounded px-3 py-1 text-sm text-white" value="https://www.apple.com" aria-label="Safari address">
+            <button class="px-3 rounded bg-blue-500 hover:bg-blue-400 text-white" type="submit"><i class="fa-solid fa-arrow-right"></i></button>
+          </form>
+          <button class="px-2 py-1 rounded bg-white/10 hover:bg-white/20" onclick="window.open(document.getElementById('safariAddress').value, '_blank', 'noopener,noreferrer')" title="Open externally"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
+        </div>
+        <div class="flex-1 rounded-lg overflow-hidden bg-white"><iframe id="safariFrame" class="w-full h-full border-0" title="Safari browser content" srcdoc="<main style='font:16px system-ui;padding:48px;color:#1f2937;text-align:center'><h1>Safari</h1><p>Enter a web address above.</p></main>"></iframe></div>
+      </div>`;
+      openAppWithLifecycle('systemAppWindow');
+    }
+
+    function navigateSafariTo(event) {
+      event.preventDefault();
+      const address = document.getElementById('safariAddress');
+      const frame = document.getElementById('safariFrame');
+      if (!address || !frame) return;
+      let url = address.value.trim();
+      if (!url.startsWith('http://') && !url.startsWith('https://')) url = `https://${url}`;
+      address.value = url;
+      frame.srcdoc = `<main style="font:16px system-ui;padding:48px;color:#1f2937;text-align:center"><h1>Safari</h1><p>This page cannot be embedded by the destination website.</p><p><a href="${url}" target="_blank" rel="noreferrer">Open ${url} in a browser tab</a></p></main>`;
+    }
+
+    function navigateSafari(direction) {
+      const frame = document.getElementById('safariFrame');
+      if (!frame || !frame.contentWindow) return;
+      direction < 0 ? frame.contentWindow.history.back() : frame.contentWindow.history.forward();
+    }
+
+    function requestNotifications() {
+      if ('Notification' in window) Notification.requestPermission();
+    }
+
+    function updateTrashStatus() {
+      const status = document.getElementById('trashStatus');
+      if (status) status.textContent = JSON.parse(localStorage.getItem('appleWebTrash') || '[]').length + ' item(s) in browser trash.';
+    }
+
+    function clearBrowserTrash() {
+      localStorage.removeItem('appleWebTrash');
+      updateTrashStatus();
+    }
+
+    async function createBrowserFile(kind = 'file') {
+      const name = prompt(`Name the new ${kind}:`, kind === 'folder' ? 'New Folder' : 'New File.txt');
+      if (!name) return;
+      if (kind === 'folder' && window.showDirectoryPicker) {
+        try {
+          const directory = await window.showDirectoryPicker({ mode: 'readwrite' });
+          await directory.getDirectoryHandle(name, { create: true });
+          alert(`Created folder ${name}`);
+          return;
+        } catch (error) {
+          if (error.name === 'AbortError') return;
+        }
+      }
+      if (window.showSaveFilePicker && kind !== 'folder') {
+        const handle = await window.showSaveFilePicker({ suggestedName: name });
+        const writable = await handle.createWritable();
+        await writable.write('Created from Apple Web OS.');
+        await writable.close();
+        alert(`Created ${name}`);
+        return;
+      }
+      const blob = new Blob([kind === 'folder' ? `Browser folder placeholder: ${name}` : 'Created from Apple Web OS.'], { type: 'text/plain' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = kind === 'folder' ? `${name}.folder.txt` : name;
+      link.click();
+      URL.revokeObjectURL(link.href);
+    }
+
+    async function chooseLocalDirectory() {
+      try {
+        if (window.showDirectoryPicker) {
+          const directory = await window.showDirectoryPicker({ mode: 'readwrite' });
+          const files = [];
+          for await (const [name, handle] of directory.entries()) {
+            if (handle.kind === 'file') {
+              const file = await handle.getFile();
+              files.push({ id: `local-${name}`, name, icon: 'fa-file', color: 'text-slate-300', size: formatFileSize(file.size), modified: new Date(file.lastModified).toLocaleString() });
+            } else {
+              files.push({ id: `local-${name}`, name, icon: 'fa-folder', color: 'text-sky-400', size: 'Folder', modified: 'Local directory' });
+            }
+          }
+          FINDER_CATEGORIES.desktop = files;
+          currentCategory = 'desktop';
+          openFinderWindow();
+          renderFinderFiles();
+          return;
+        }
+      } catch (error) {
+        if (error.name === 'AbortError') return;
+      }
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.webkitdirectory = true;
+      input.multiple = true;
+      input.onchange = () => {
+        FINDER_CATEGORIES.desktop = Array.from(input.files).map(file => ({ id: `local-${file.name}`, name: file.name, icon: 'fa-file', color: 'text-slate-300', size: formatFileSize(file.size), modified: new Date(file.lastModified).toLocaleString() }));
+        openFinderWindow();
+        renderFinderFiles();
+      };
+      input.click();
+    }
+
+    function formatFileSize(bytes) {
+      if (bytes < 1024) return `${bytes} B`;
+      if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+      return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+    }
+
+    function updateBrowserNetworkStatus() {
+      const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+      const online = navigator.onLine;
+      const detail = connection ? `${connection.effectiveType || 'unknown'}${connection.downlink ? ` · ${connection.downlink} Mbps` : ''}` : 'Browser network API';
+      const network = document.querySelector('#wifiNetworkContent .text-\\[10px\\]');
+      if (network) network.textContent = `${online ? 'Online' : 'Offline'} · ${detail}`;
+    }
+
+    window.addEventListener('online', updateBrowserNetworkStatus);
+    window.addEventListener('offline', updateBrowserNetworkStatus);
+    if (navigator.connection) navigator.connection.addEventListener('change', updateBrowserNetworkStatus);
+    updateBrowserNetworkStatus();
 
     // =========================================================================
     // TOP MENU BAR & DROPDOWN MANAGEMENT
@@ -2141,7 +2458,7 @@
       } else if (action === 'finder') {
         openFinderWindow();
       } else if (action === 'safari') {
-        openSafariDemo(document.querySelector('[data-app="safari"]'));
+        openRealApp('safari', document.querySelector('[data-app="safari"]'));
       } else if (action === 'theme') {
         toggleWallpaperHue();
       } else if (action === 'lock') {
@@ -2359,6 +2676,7 @@
     dragElement(document.getElementById("terminalWindow"), document.getElementById("terminalHeader"));
     dragElement(document.getElementById("finderExplorerWindow"), document.getElementById("finderHeader"));
     dragElement(document.getElementById("finderWindow"), document.getElementById("finderAboutHeader"));
+    dragElement(document.getElementById("systemAppWindow"), document.getElementById("systemAppHeader"));
 
     function dragElement(elmnt, headerEl) {
       if (!elmnt) return;
@@ -2394,6 +2712,28 @@
       }
     }
 
+    let altTabIndex = 0;
+    function cycleWindows() {
+      const windows = Array.from(document.querySelectorAll('.mac-window:not(.hidden)'));
+      if (!windows.length) return;
+      altTabIndex = (altTabIndex + 1) % windows.length;
+      bringToFront(windows[altTabIndex].id);
+    }
+
+    window.addEventListener('keydown', event => {
+      if (isScreenLocked) return;
+      if (event.altKey && event.key === 'Tab') {
+        event.preventDefault();
+        cycleWindows();
+      }
+      if (event.ctrlKey && event.key === 'Tab' && document.fullscreenElement && systemAppTabOrder.length) {
+        event.preventDefault();
+        const index = systemAppTabOrder.indexOf(activeSystemAppTab);
+        const next = systemAppTabOrder[(index + 1) % systemAppTabOrder.length];
+        openRealApp(next);
+      }
+    });
+
     // Terminal Commands
     const termInput = document.getElementById('terminalInput');
     const commandHistory = document.getElementById('commandHistory');
@@ -2401,20 +2741,59 @@
 
     const COMMANDS = {
       help: `Available commands:
-  • <span class="text-yellow-400">whoami</span>        Display user profile & status
-  • <span class="text-pink-400">skills</span>        List technical tech stack
-  • <span class="text-cyan-400">finder</span>        Open macOS Finder Explorer window
-  • <span class="text-blue-400">wifi</span>          Display current network parameters
-  • <span class="text-emerald-400">theme</span>         Toggle background color vibes
-  • <span class="text-indigo-400">lock</span>          Lock macOS screen
-  • <span class="text-amber-300">neofetch</span>      macOS Sonoma system summary
-  • <span class="text-red-400">clear</span>         Clear terminal output`,
-      whoami: `Avinash Pamarthi (@avinashcreates)
-Fullstack Engineer · AI Enthusiast · Innovator
-Location: Vijayawada, IN · Building responsive next-gen interfaces`,
+      • <span class="text-yellow-400">help</span>        Show this command list
+      • <span class="text-cyan-400">description</span> Show portfolio summary
+      • <span class="text-red-400">clear</span>       Clear terminal output
+      • <span class="text-pink-400">aboutme</span>     About Pamarthi Avinash
+      • <span class="text-amber-300">fontcolor</span>   Change terminal text color
+      • <span class="text-emerald-400">background</span> Change desktop wallpaper mood
+      • <span class="text-blue-400">echo</span>        Print a message
+      • <span class="text-red-300">gmail</span>       Open contact email
+      • <span class="text-sky-400">projects</span>    Show selected projects
+      • <span class="text-purple-400">socials</span>     Show social links
+      • <span class="text-green-400">portfolio</span>   Open portfolio window
+      • <span class="text-white">exit</span>        Minimize Terminal`,
+      description: `Pamarthi Avinash is a Fullstack Engineer and AI Enthusiast building responsive, thoughtful interfaces and practical products.`,
+      aboutme: `Pamarthi Avinash
+    Fullstack Engineer · AI Enthusiast · Innovator
+    Building next-generation interfaces with React, TypeScript, Node.js and Python.`,
+      whoami: `Pamarthi Avinash (@avinashcreates)
+    Fullstack Engineer · AI Enthusiast · Innovator
+    Location: Vijayawada, IN · Building responsive next-gen interfaces`,
       skills: `Frontend : React, Next.js, TypeScript, TailwindCSS, Three.js
 Backend  : Node.js, Python, GraphQL, Express, Django
 DevOps   : Docker, AWS, GitHub Actions, Vercel`,
+      fontcolor: () => {
+        const colors = ['#38bdf8', '#f9a8d4', '#86efac', '#fde68a', '#c4b5fd'];
+        const next = colors[Math.floor(Math.random() * colors.length)];
+        document.getElementById('termOutput').style.color = next;
+        return `Terminal font color changed to ${next}`;
+      },
+      background: () => {
+        toggleWallpaperHue();
+        return 'Desktop background mood changed.';
+      },
+      echo: (message = '') => escapeHtml(message || 'Usage: echo your message'),
+      gmail: () => {
+        window.location.href = 'mailto:avinashcreates@gmail.com';
+        return 'Opening avinashcreates@gmail.com';
+      },
+      projects: `Selected projects:
+• Apple Web OS portfolio desktop
+• Responsive fullstack interfaces
+• AI-powered product experiments`,
+      socials: `GitHub: https://github.com/avinashcreates
+LinkedIn: https://www.linkedin.com/in/avinashpamarthi
+Instagram: https://www.instagram.com/avinashcreates
+LeetCode: https://leetcode.com/avinashcreates`,
+      portfolio: () => {
+        openRealApp('portfolio');
+        return 'Opening portfolio...';
+      },
+      exit: () => {
+        minimizeWindow('terminalWindow');
+        return 'Terminal minimized.';
+      },
       wifi: `Current Wi-Fi SSID: Apple_Park_5G_Campus
 Signal Strength: -48 dBm (Excellent)
 Channel: 36 (5 GHz, 80 MHz)
@@ -2452,7 +2831,9 @@ Router Gateway: 192.168.1.1`,
         cmdLine.innerHTML = `<span class="text-emerald-400 font-bold">➜</span> <span class="text-cyan-400 font-medium">~</span> <span class="text-white">${escapeHtml(val)}</span>`;
         commandHistory.appendChild(cmdLine);
 
-        const lower = val.toLowerCase();
+        const parts = val.split(/\s+/);
+        const lower = parts[0].toLowerCase();
+        const commandArgs = parts.slice(1).join(' ');
 
         if (lower === 'clear') {
           commandHistory.innerHTML = '';
@@ -2463,7 +2844,7 @@ Router Gateway: 192.168.1.1`,
         outLine.className = 'text-gray-300 text-[12.5px] whitespace-pre-wrap mt-1';
 
         if (COMMANDS[lower]) {
-          const res = typeof COMMANDS[lower] === 'function' ? COMMANDS[lower]() : COMMANDS[lower];
+          const res = typeof COMMANDS[lower] === 'function' ? COMMANDS[lower](commandArgs) : COMMANDS[lower];
           outLine.innerHTML = res;
         } else if (lower === 'theme') {
           toggleWallpaperHue();
@@ -2483,5 +2864,18 @@ Router Gateway: 192.168.1.1`,
 
     // Initialize default Finder file view
     renderFinderFiles();
+    applySavedProfilePhoto();
+    const savedBrightness = localStorage.getItem('appleWebBrightness');
+    const savedVolume = localStorage.getItem('appleWebVolume');
+    if (savedBrightness) {
+      const brightnessControl = document.getElementById('brightnessControl');
+      if (brightnessControl) brightnessControl.value = savedBrightness;
+      setDisplayBrightness(savedBrightness);
+    }
+    if (savedVolume) {
+      const volumeControl = document.getElementById('volumeControl');
+      if (volumeControl) volumeControl.value = Number(savedVolume) * 100;
+      setPageVolume(Number(savedVolume) * 100);
+    }
   </script>
 </body></html>
