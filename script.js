@@ -234,17 +234,34 @@
       }, 120);
     }
 
+    const DOCK_APP_MAP = { terminalWindow: 'terminal', finderExplorerWindow: 'finder', finderWindow: 'finder' };
+
+    function getDockIconRect(id) {
+      let appKey = DOCK_APP_MAP[id];
+      if (id === 'systemAppWindow') appKey = activeSystemAppTab || 'launchpad';
+      const el = document.querySelector(`.dock-item[data-app="${appKey}"]`) || document.querySelector('.dock-item[data-app="finder"]');
+      return el ? el.getBoundingClientRect() : null;
+    }
+
     function minimizeWindow(id) {
       const win = document.getElementById(id);
       if (!win) return;
 
-      // Smooth macOS scale/genie down toward Dock
+      // Real macOS-style genie: shrink toward the actual dock icon position
+      const winRect = win.getBoundingClientRect();
+      const dockRect = getDockIconRect(id);
+      if (dockRect) {
+        const dx = (dockRect.left + dockRect.width / 2) - (winRect.left + winRect.width / 2);
+        const dy = (dockRect.top + dockRect.height / 2) - (winRect.top + winRect.height / 2);
+        win.style.setProperty('--genie-x', dx + 'px');
+        win.style.setProperty('--genie-y', dy + 'px');
+      }
       win.classList.add('win-minimizing');
       setTimeout(() => {
         win.classList.add('hidden');
         win.classList.remove('win-minimizing');
         win.dataset.minimized = "true";
-      }, 180);
+      }, 220);
     }
 
     function unminimizeWindow(id) {
@@ -258,7 +275,7 @@
 
       setTimeout(() => {
         win.classList.remove('win-unminimizing');
-      }, 180);
+      }, 220);
     }
 
     function handleDockClick(appType, windowId, event) {
@@ -571,6 +588,7 @@
       events[key] = eventName;
       localStorage.setItem('appleWebCalendarEvents', JSON.stringify(events));
       renderCalendar();
+      notify('Calendar', `"${eventName}" added.`, 'fa-calendar');
     }
 
     function playLocalAudio(input) {
@@ -649,6 +667,8 @@
         clearTimeout(saveNote._t);
         saveNote._t = setTimeout(() => { status.textContent = 'Saved'; }, 400);
       }
+      clearTimeout(saveNote._notifyT);
+      saveNote._notifyT = setTimeout(() => notify('Notes', 'Your note was saved.', 'fa-note-sticky'), 900);
     }
 
     function loadNote() {
@@ -673,6 +693,7 @@
       const subject = document.getElementById('mailSubject')?.value.trim() || '';
       const body = document.getElementById('mailBody')?.value.trim() || '';
       window.location.href = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      notify('Mail', `Message queued to ${to}.`, 'fa-envelope');
     }
 
     function sendQuickMessage(event) {
@@ -694,11 +715,13 @@
         thread.appendChild(reply);
         thread.scrollTop = thread.scrollHeight;
         window.location.href = `mailto:avinashcreates@gmail.com?subject=${encodeURIComponent('Message from your portfolio')}&body=${encodeURIComponent(text)}`;
+        notify('Messages', 'Delivered — routed to email.', 'fa-comment');
       }, 500);
     }
 
     function requestFaceTime() {
       window.location.href = `mailto:avinashcreates@gmail.com?subject=${encodeURIComponent("Let's schedule a call")}&body=${encodeURIComponent('Hi Avinash, I would like to schedule a call. Here are a few times that work for me:\n')}`;
+      notify('FaceTime', 'Call request sent by email.', 'fa-video');
     }
 
     function updateTrashStatus() {
@@ -709,6 +732,7 @@
     function clearBrowserTrash() {
       localStorage.removeItem('appleWebTrash');
       updateTrashStatus();
+      notify('Trash', 'Trash emptied.', 'fa-trash-can');
     }
 
     async function createBrowserFile(kind = 'file') {
@@ -824,6 +848,12 @@
         const cp = document.getElementById('controlCenterPopover');
         if (cp) cp.style.display = 'none';
       }
+      if (!e || (!e.target.closest('#notificationCenterPanel') && !e.target.closest('#liveClock'))) {
+        const nc = document.getElementById('notificationCenterPanel');
+        if (nc) nc.style.display = 'none';
+      }
+      hideDesktopContextMenu();
+      hideDockContextMenu();
     }
 
     function toggleWifiPopover(e) {
@@ -865,7 +895,7 @@
     function switchNetwork(name) {
       const current = document.getElementById('currentWifiSsid');
       if (current) current.textContent = name;
-      alert(`Connected to ${name}`);
+      notify('Wi-Fi', `Connected to ${name}.`, 'fa-wifi');
     }
 
     function toggleBluetoothState(el) {
@@ -922,6 +952,20 @@
       { name: 'Terminal', type: 'Application', desc: 'macOS Command Line Shell', action: 'terminal', icon: 'fa-terminal', color: 'bg-zinc-800' },
       { name: 'Finder', type: 'Application', desc: 'Desktop File Explorer & Drives', action: 'finder', icon: 'fa-folder-open', color: 'bg-blue-600' },
       { name: 'Safari', type: 'Application', desc: 'Fast, secure web browsing', action: 'safari', icon: 'fa-compass', color: 'bg-sky-500' },
+      { name: 'Portfolio', type: 'Application', desc: 'About Pamarthi Avinash', action: 'app:portfolio', icon: 'fa-id-card', color: 'bg-cyan-600' },
+      { name: 'Projects', type: 'Application', desc: 'TBEF, INNOGENESIS 2026 & more', action: 'app:projects', icon: 'fa-diagram-project', color: 'bg-purple-600' },
+      { name: 'Contact', type: 'Application', desc: 'Email & social links', action: 'app:contact', icon: 'fa-address-book', color: 'bg-pink-600' },
+      { name: 'Notes', type: 'Application', desc: 'Quick note, auto-saved', action: 'app:notes', icon: 'fa-note-sticky', color: 'bg-amber-500' },
+      { name: 'Mail', type: 'Application', desc: 'Compose a real email', action: 'app:mail', icon: 'fa-envelope', color: 'bg-blue-500' },
+      { name: 'Photos', type: 'Application', desc: 'Photo library', action: 'app:photos', icon: 'fa-image', color: 'bg-rose-500' },
+      { name: 'Messages', type: 'Application', desc: 'Send a quick message', action: 'app:messages', icon: 'fa-comment', color: 'bg-green-500' },
+      { name: 'FaceTime', type: 'Application', desc: 'Schedule a real call', action: 'app:facetime', icon: 'fa-video', color: 'bg-emerald-500' },
+      { name: 'Calendar', type: 'Application', desc: 'Events, saved locally', action: 'app:calendar', icon: 'fa-calendar', color: 'bg-red-500' },
+      { name: 'Music', type: 'Application', desc: 'Local audio player', action: 'app:music', icon: 'fa-music', color: 'bg-pink-500' },
+      { name: 'System Settings', type: 'Application', desc: 'Profile & desktop settings', action: 'app:settings', icon: 'fa-gear', color: 'bg-slate-600' },
+      { name: 'Trash', type: 'Application', desc: 'Browser trash bin', action: 'app:trash', icon: 'fa-trash-can', color: 'bg-slate-500' },
+      { name: 'Launchpad', type: 'Application', desc: 'All applications', action: 'app:launchpad', icon: 'fa-shapes', color: 'bg-zinc-700' },
+      { name: 'Mission Control', type: 'Action', desc: 'See every open window', action: 'mission', icon: 'fa-table-cells', color: 'bg-sky-600' },
       { name: 'Change Wallpaper Hue', type: 'Action', desc: 'Shift dynamic Sonoma ambient colors', action: 'theme', icon: 'fa-palette', color: 'bg-amber-500' },
       { name: 'Lock Screen', type: 'System', desc: 'Lock macOS and protect desktop', action: 'lock', icon: 'fa-lock', color: 'bg-indigo-600' },
       { name: 'About This Mac', type: 'System Info', desc: 'View Apple Silicon M3 specs', action: 'about', icon: 'fa-apple', color: 'bg-slate-700' }
@@ -989,6 +1033,10 @@
         lockDesktop();
       } else if (action === 'about') {
         openAboutModal();
+      } else if (action === 'mission') {
+        openMissionControl();
+      } else if (action.startsWith('app:')) {
+        openRealApp(action.slice(4));
       }
     }
 
@@ -1008,6 +1056,7 @@
         wp.style.filter = 'none';
         if (mesh) mesh.style.filter = 'blur(40px)';
       }
+      notify('Wallpaper', 'Desktop background mood changed.', 'fa-palette');
     }
 
     // =========================================================================
@@ -1228,13 +1277,87 @@
         pos4 = e.clientY;
         elmnt.style.top = Math.max(28, (elmnt.offsetTop - pos2)) + "px";
         elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+        showSnapPreview(pos3, pos4);
       }
 
       function closeDragElement() {
         document.onmouseup = null;
         document.onmousemove = null;
+        applySnapIfNeeded(elmnt, pos3, pos4);
+        hideSnapPreview();
       }
     }
+
+    // =========================================================================
+    // WINDOW SNAPPING (drag to screen edge to tile, like real macOS/Stage Manager)
+    // =========================================================================
+    function getSnapZone(x, y) {
+      const w = window.innerWidth, h = window.innerHeight, margin = 26;
+      const usableH = (h - 86) + 'px';
+      if (y < 30) return { type: 'max', top: '28px', left: '0px', width: '100vw', height: usableH };
+      if (x < margin) return { type: 'left', top: '28px', left: '0px', width: (w / 2) + 'px', height: usableH };
+      if (x > w - margin) return { type: 'right', top: '28px', left: (w / 2) + 'px', width: (w / 2) + 'px', height: usableH };
+      return null;
+    }
+
+    function showSnapPreview(x, y) {
+      const zone = getSnapZone(x, y);
+      let preview = document.getElementById('snapPreview');
+      if (!preview) {
+        preview = document.createElement('div');
+        preview.id = 'snapPreview';
+        document.body.appendChild(preview);
+      }
+      if (!zone) { preview.style.display = 'none'; return; }
+      preview.style.top = zone.top;
+      preview.style.left = zone.left;
+      preview.style.width = zone.width;
+      preview.style.height = zone.height;
+      preview.style.display = 'block';
+    }
+
+    function hideSnapPreview() {
+      const preview = document.getElementById('snapPreview');
+      if (preview) preview.style.display = 'none';
+    }
+
+    function applySnapIfNeeded(win, x, y) {
+      const zone = getSnapZone(x, y);
+      if (!zone) return;
+      win.style.top = zone.top;
+      win.style.left = zone.left;
+      win.style.width = zone.width;
+      win.style.height = zone.height;
+      win.style.borderRadius = zone.type === 'max' ? '0px' : '12px';
+    }
+
+    // =========================================================================
+    // WINDOW RESIZING (drag the bottom-right corner, like a real desktop OS)
+    // =========================================================================
+    function makeResizable(win) {
+      if (!win || win.querySelector('.win-resize-handle')) return;
+      const handle = document.createElement('div');
+      handle.className = 'win-resize-handle';
+      win.appendChild(handle);
+      handle.addEventListener('mousedown', (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        bringToFront(win.id);
+        const startX = e.clientX, startY = e.clientY;
+        const startW = win.offsetWidth, startH = win.offsetHeight;
+        function onMove(ev) {
+          win.style.width = Math.max(340, startW + (ev.clientX - startX)) + 'px';
+          win.style.height = Math.max(220, startH + (ev.clientY - startY)) + 'px';
+        }
+        function onUp() {
+          document.removeEventListener('mousemove', onMove);
+          document.removeEventListener('mouseup', onUp);
+        }
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('mouseup', onUp);
+      });
+    }
+    document.querySelectorAll('.mac-window').forEach(makeResizable);
 
     let altTabIndex = 0;
     function cycleWindows() {
@@ -1256,7 +1379,166 @@
         const next = systemAppTabOrder[(index + 1) % systemAppTabOrder.length];
         openRealApp(next);
       }
+      if (event.key === 'F3' || (event.ctrlKey && event.key === 'ArrowUp')) {
+        event.preventDefault();
+        openMissionControl();
+      }
+      if (event.key === 'Escape') {
+        exitMissionControl();
+      }
     });
+
+    // =========================================================================
+    // MISSION CONTROL (window overview — real macOS style)
+    // =========================================================================
+    function openMissionControl() {
+      closeAllDropdowns();
+      const overlay = document.getElementById('missionControlOverlay');
+      const grid = document.getElementById('missionControlGrid');
+      if (!overlay || !grid) return;
+      const windows = Array.from(document.querySelectorAll('.mac-window')).filter(w => !w.classList.contains('hidden'));
+      if (!windows.length) {
+        notify('Mission Control', 'No open windows to show.', 'fa-table-cells');
+        return;
+      }
+      grid.innerHTML = windows.map(w => {
+        const title = w.querySelector('.win-title')?.textContent.trim() || w.id;
+        return `<div class="mission-thumb" onclick="exitMissionControl('${w.id}')">
+          <div class="mission-thumb-preview">${w.innerHTML}</div>
+          <div class="mission-thumb-label">${title}</div>
+        </div>`;
+      }).join('');
+      overlay.style.display = 'flex';
+    }
+
+    function exitMissionControl(focusId) {
+      const overlay = document.getElementById('missionControlOverlay');
+      if (overlay) overlay.style.display = 'none';
+      if (focusId) bringToFront(focusId);
+    }
+
+    // =========================================================================
+    // DESKTOP & DOCK RIGHT-CLICK CONTEXT MENUS
+    // =========================================================================
+    document.body.addEventListener('contextmenu', (e) => {
+      const dockItem = e.target.closest('.dock-item');
+      if (dockItem) {
+        e.preventDefault();
+        showDockContextMenu(e, dockItem.dataset.app);
+        return;
+      }
+      if (e.target.closest('.mac-window') || e.target.closest('.dock') || e.target.closest('.menubar') || e.target.closest('.mac-popover') || e.target.closest('#spotlightOverlay') || e.target.closest('#missionControlOverlay')) return;
+      e.preventDefault();
+      showDesktopContextMenu(e);
+    });
+
+    function showDesktopContextMenu(e) {
+      closeAllDropdowns();
+      const menu = document.getElementById('desktopContextMenu');
+      if (!menu) return;
+      menu.style.left = Math.min(e.clientX, window.innerWidth - 230) + 'px';
+      menu.style.top = Math.min(e.clientY, window.innerHeight - 220) + 'px';
+      menu.style.display = 'block';
+    }
+
+    function hideDesktopContextMenu() {
+      const menu = document.getElementById('desktopContextMenu');
+      if (menu) menu.style.display = 'none';
+    }
+
+    function showDockContextMenu(e, appName) {
+      closeAllDropdowns();
+      const menu = document.getElementById('dockContextMenu');
+      if (!menu) return;
+      menu.dataset.app = appName;
+      const titleEl = menu.querySelector('.dock-ctx-title');
+      if (titleEl) titleEl.textContent = appName.charAt(0).toUpperCase() + appName.slice(1);
+      menu.style.left = Math.min(e.clientX, window.innerWidth - 220) + 'px';
+      menu.style.top = Math.max(40, e.clientY - 90) + 'px';
+      menu.style.display = 'block';
+    }
+
+    function hideDockContextMenu() {
+      const menu = document.getElementById('dockContextMenu');
+      if (menu) menu.style.display = 'none';
+    }
+
+    function dockContextAction(action) {
+      const menu = document.getElementById('dockContextMenu');
+      const app = menu ? menu.dataset.app : null;
+      hideDockContextMenu();
+      if (!app) return;
+      if (action === 'open') {
+        document.querySelector(`.dock-item[data-app="${app}"]`)?.click();
+      } else if (action === 'quit') {
+        const winIdMap = { terminal: 'terminalWindow', finder: 'finderExplorerWindow' };
+        const winId = winIdMap[app] || (activeSystemAppTab === app ? 'systemAppWindow' : null);
+        if (winId) closeWindow(winId);
+        else notify(app.charAt(0).toUpperCase() + app.slice(1), 'App is not currently open.', 'fa-circle-info');
+      }
+    }
+
+    // =========================================================================
+    // FOCUS / DO NOT DISTURB
+    // =========================================================================
+    let doNotDisturb = false;
+    function toggleDoNotDisturb(el) {
+      doNotDisturb = !doNotDisturb;
+      if (el) el.classList.toggle('bg-indigo-500/60', doNotDisturb);
+      notify(doNotDisturb ? 'Focus On' : 'Focus Off', doNotDisturb ? 'Notifications are now silenced.' : 'Notifications will show again.', 'fa-moon', true);
+    }
+
+    // =========================================================================
+    // TOAST NOTIFICATIONS & NOTIFICATION CENTER
+    // =========================================================================
+    const notificationHistory = [];
+    function notify(title, body, icon = 'fa-bell', force = false) {
+      notificationHistory.unshift({ title, body, icon, time: new Date() });
+      if (notificationHistory.length > 30) notificationHistory.pop();
+      renderNotificationCenter();
+      if (doNotDisturb && !force) return;
+
+      const stack = document.getElementById('toastStack');
+      if (!stack) return;
+      const toast = document.createElement('div');
+      toast.className = 'mac-toast';
+      toast.innerHTML = `<div class="toast-icon"><i class="fa-solid ${icon}"></i></div><div><div class="toast-title">${title}</div><div class="toast-body">${body}</div></div>`;
+      stack.appendChild(toast);
+      setTimeout(() => {
+        toast.classList.add('toast-out');
+        setTimeout(() => toast.remove(), 220);
+      }, 3600);
+    }
+
+    function renderNotificationCenter() {
+      const list = document.getElementById('notificationCenterList');
+      if (!list) return;
+      if (!notificationHistory.length) {
+        list.innerHTML = `<div class="text-white/40 text-xs text-center py-6">No notifications yet.</div>`;
+        return;
+      }
+      list.innerHTML = notificationHistory.map(n => `
+        <div class="notif-item">
+          <div class="flex items-center gap-2"><i class="fa-solid ${n.icon} text-sky-300 text-xs"></i><span class="notif-title">${n.title}</span></div>
+          <div class="notif-body">${n.body}</div>
+          <div class="notif-time">${n.time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+        </div>
+      `).join('');
+    }
+
+    function toggleNotificationCenter(e) {
+      if (e) e.stopPropagation();
+      closeAllDropdowns();
+      const panel = document.getElementById('notificationCenterPanel');
+      if (!panel) return;
+      panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+      if (panel.style.display === 'block') renderNotificationCenter();
+    }
+
+    function clearNotifications() {
+      notificationHistory.length = 0;
+      renderNotificationCenter();
+    }
 
     // Terminal Commands
     const termInput = document.getElementById('terminalInput');

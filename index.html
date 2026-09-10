@@ -361,7 +361,7 @@
 </svg>
 </div>
 <!-- Live Clock -->
-<div class="menu-item text-[12px] tracking-tight font-medium cursor-pointer" id="liveClock" onclick="lockDesktop()">
+<div class="menu-item text-[12px] tracking-tight font-medium cursor-pointer" id="liveClock" onclick="toggleNotificationCenter(event)">
         Tue Sep 12 9:41 AM
       </div>
 </div>
@@ -487,6 +487,11 @@
 <input class="w-full accent-white cursor-pointer h-1.5 bg-white/20 rounded-lg" id="volumeControl" max="100" min="0" oninput="setPageVolume(this.value)" type="range" value="75"/>
 </div>
 </div>
+<div class="grid grid-cols-2 gap-2 mt-2">
+<div class="bg-white/10 rounded-xl p-2.5 flex items-center gap-2 cursor-pointer hover:bg-white/15 text-xs font-medium" onclick="openMissionControl(); closeAllDropdowns()"><i class="fa-solid fa-table-cells text-sky-300"></i>Mission Control</div>
+<div class="bg-white/10 rounded-xl p-2.5 flex items-center gap-2 cursor-pointer hover:bg-white/15 text-xs font-medium" id="dndToggle" onclick="toggleDoNotDisturb(this)"><i class="fa-solid fa-moon text-indigo-300"></i>Focus</div>
+</div>
+<div class="bg-white/10 rounded-xl p-2.5 flex items-center justify-center gap-2 cursor-pointer hover:bg-white/15 text-xs font-medium mt-2" onclick="lockDesktop(); closeAllDropdowns()"><i class="fa-solid fa-lock"></i>Lock Screen</div>
 </div>
 <!-- Spotlight Search Modal Overlay -->
 <div class="spotlight-backdrop" id="spotlightOverlay" onclick="closeSpotlight(event)">
@@ -833,6 +838,37 @@
 </div>
 </div>
 </div>
+</div>
+<!-- Mission Control Overview -->
+<div id="missionControlOverlay" onclick="if(event.target===this) exitMissionControl()">
+<div class="mission-hint">Mission Control — click a window, or press Esc</div>
+<div id="missionControlGrid"></div>
+</div>
+<!-- Desktop Right-Click Context Menu -->
+<div class="mac-menu-dropdown" id="desktopContextMenu" onclick="event.stopPropagation()" style="top:auto;left:auto;position:fixed;">
+<div class="menu-row" onclick="createBrowserFile('folder'); hideDesktopContextMenu()"><span>New Folder</span></div>
+<div class="menu-row" onclick="toggleApp('terminalWindow'); hideDesktopContextMenu()"><span>New Terminal Window</span></div>
+<div class="menu-separator"></div>
+<div class="menu-row" onclick="toggleWallpaperHue(); hideDesktopContextMenu()"><span>Change Wallpaper</span></div>
+<div class="menu-row" onclick="openMissionControl(); hideDesktopContextMenu()"><span>Mission Control</span><span class="menu-shortcut">^↑</span></div>
+<div class="menu-separator"></div>
+<div class="menu-row" onclick="openAboutModal(); hideDesktopContextMenu()"><span>Get Info</span></div>
+</div>
+<!-- Dock Icon Right-Click Context Menu -->
+<div class="mac-menu-dropdown" id="dockContextMenu" onclick="event.stopPropagation()" style="top:auto;left:auto;position:fixed;">
+<div class="dock-ctx-title px-2 py-1 text-[11px] uppercase tracking-wider text-white/40"></div>
+<div class="menu-row" onclick="dockContextAction('open')"><span>Open</span></div>
+<div class="menu-row" onclick="dockContextAction('quit')"><span>Quit</span></div>
+</div>
+<!-- Toast Notification Stack -->
+<div id="toastStack"></div>
+<!-- Notification Center Panel -->
+<div class="mac-popover" id="notificationCenterPanel" onclick="event.stopPropagation()" style="right:8px;left:auto;width:300px;">
+<div class="flex items-center justify-between mb-2 px-1">
+<span class="text-xs font-semibold text-white/70 uppercase tracking-wider">Notifications</span>
+<span class="text-[11px] text-blue-400 cursor-pointer hover:underline" onclick="clearNotifications()">Clear All</span>
+</div>
+<div id="notificationCenterList" class="space-y-2 max-h-[70vh] overflow-y-auto"></div>
 </div>
 <script src="script.js"></script>
 </body></html>

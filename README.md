@@ -7,10 +7,14 @@ This repository contains the source for a custom macOS-inspired environment that
 
 ## ✨ Key Features
 - **Boot & Lock Screen** — animated multilingual "hello" boot sequence, then an authentic lock screen with live clock and profile photo.
-- **Window Manager** — draggable, resizable, minimizable, maximizable windows with z-index stacking and Alt+Tab cycling.
+- **Window Manager** — draggable **and resizable** (drag the bottom-right corner) windows, drag-to-edge **snapping** (left/right half, top to maximize, just like macOS/Windows tiling), minimize/maximize/close with a genie effect that actually shrinks toward the real Dock icon, z-index stacking, and Alt+Tab cycling.
+- **Mission Control** — press **F3** / **Ctrl+↑**, right-click the desktop, or use Control Center to see every open window at once and click to jump to it.
+- **Right-click context menus** — on the desktop (New Folder, New Terminal, Change Wallpaper, Mission Control, Get Info) and on any Dock icon (Open, Quit).
+- **Notifications** — real toast banners (top-right) plus a Notification Center panel (click the clock) that logs everything: notes saved, mail sent, wallpaper changed, Wi-Fi connected, and more. A Focus/Do Not Disturb toggle silences them.
 - **Working Terminal** — a real zsh-style shell with custom commands (`help`, `whoami`, `skills`, `projects`, `socials`, `neofetch`, and more).
 - **Finder** — a functional file browser view with categories (Recents, Documents, Desktop, Downloads, Applications).
 - **App Suite** — Portfolio, Projects (TBEF research + INNOGENESIS 2026 + this desktop), Contact & Socials, Calendar with saved events, Notes (auto-saves to the browser), Mail (opens a real compose window), Photos (lightbox viewer), Messages (routes to real email), FaceTime (schedule-a-call via email), and System Settings.
+- **Spotlight (⌘K)** — indexes every app and system action, not just a couple of them.
 - **Persisted State** — brightness, volume, calendar events, and notes are saved with `localStorage` so they survive a refresh.
 - **Performance-minded** — no heavy frameworks; plain HTML/CSS/JS plus the Tailwind CDN and Font Awesome icons.
 

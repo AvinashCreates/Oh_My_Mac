@@ -515,26 +515,30 @@
       }
     }
 
-    /* Genie / scale minimize transition */
+    /* Genie / scale minimize transition — animates toward the real Dock icon */
+    .mac-window {
+      --genie-x: 0px;
+      --genie-y: 280px;
+    }
     .win-minimizing {
       pointer-events: none;
-      transition: transform 0.2s cubic-bezier(0.2, 0.9, 0.2, 1), opacity 0.18s ease !important;
-      transform: translateY(280px) scale(0.08) !important;
+      transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease !important;
+      transform: translate(var(--genie-x), var(--genie-y)) scale(0.06) !important;
       opacity: 0 !important;
     }
 
     .win-unminimizing {
-      animation: winUnminimize 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation: winUnminimize 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
     @keyframes winUnminimize {
       0% {
         opacity: 0;
-        transform: translateY(180px) scale(0.4);
+        transform: translate(var(--genie-x), var(--genie-y)) scale(0.06);
       }
       100% {
         opacity: 1;
-        transform: translateY(0) scale(1);
+        transform: translate(0, 0) scale(1);
       }
     }
 
@@ -672,6 +676,173 @@
       from { opacity: 0; transform: translateY(-12px) scale(0.98); }
       to { opacity: 1; transform: translateY(0) scale(1); }
     }
+
+    /* ==========================================================================
+       WINDOW RESIZE HANDLE
+       ========================================================================== */
+    .win-resize-handle {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 18px;
+      height: 18px;
+      cursor: nwse-resize;
+      z-index: 6;
+      background: linear-gradient(135deg, transparent 55%, rgba(255,255,255,0.35) 55%, rgba(255,255,255,0.35) 65%, transparent 65%, transparent 75%, rgba(255,255,255,0.35) 75%, rgba(255,255,255,0.35) 85%, transparent 85%);
+      opacity: 0;
+      transition: opacity 0.15s ease;
+    }
+    .mac-window:hover .win-resize-handle { opacity: 1; }
+
+    /* ==========================================================================
+       WINDOW SNAP PREVIEW
+       ========================================================================== */
+    #snapPreview {
+      position: fixed;
+      background: rgba(10, 132, 255, 0.25);
+      border: 1.5px solid rgba(255, 255, 255, 0.55);
+      border-radius: 10px;
+      z-index: 9000;
+      pointer-events: none;
+      display: none;
+      transition: top 0.1s ease, left 0.1s ease, width 0.1s ease, height 0.1s ease;
+    }
+
+    /* ==========================================================================
+       MISSION CONTROL
+       ========================================================================== */
+    #missionControlOverlay {
+      position: fixed;
+      inset: 0;
+      z-index: 5000;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      padding: 70px 40px 40px;
+      background: rgba(8, 12, 18, 0.55);
+      backdrop-filter: blur(40px) saturate(160%);
+      -webkit-backdrop-filter: blur(40px) saturate(160%);
+      animation: popoverDrop 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .mission-hint {
+      color: rgba(255,255,255,0.55);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+    #missionControlGrid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: center;
+      align-items: center;
+      max-width: 1400px;
+      overflow-y: auto;
+    }
+    .mission-thumb {
+      width: 300px;
+      height: 190px;
+      border-radius: 13px;
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+      background: #14181f;
+      box-shadow: 0 20px 45px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.12);
+      transform: scale(1);
+      transition: transform 0.15s cubic-bezier(0.16,1,0.3,1), box-shadow 0.15s ease;
+    }
+    .mission-thumb:hover {
+      transform: scale(1.045) translateY(-4px);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.25);
+    }
+    .mission-thumb-label {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #fff;
+      background: linear-gradient(0deg, rgba(0,0,0,0.7), transparent);
+      z-index: 2;
+    }
+    .mission-thumb-preview {
+      transform: scale(0.32);
+      transform-origin: top left;
+      width: 312%;
+      height: 312%;
+      pointer-events: none;
+    }
+
+    /* ==========================================================================
+       DESKTOP / DOCK RIGHT-CLICK CONTEXT MENUS
+       ========================================================================== */
+    #desktopContextMenu, #dockContextMenu {
+      min-width: 210px;
+    }
+    .dock-ctx-title {
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      margin-bottom: 3px;
+    }
+
+    /* ==========================================================================
+       TOAST NOTIFICATIONS & NOTIFICATION CENTER
+       ========================================================================== */
+    #toastStack {
+      position: fixed;
+      top: 36px;
+      right: 12px;
+      z-index: 8000;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none;
+    }
+    .mac-toast {
+      width: 300px;
+      background: rgba(40, 46, 54, 0.92);
+      backdrop-filter: blur(30px) saturate(200%);
+      -webkit-backdrop-filter: blur(30px) saturate(200%);
+      border: 0.5px solid rgba(255,255,255,0.2);
+      border-radius: 12px;
+      box-shadow: 0 18px 38px rgba(0,0,0,0.5);
+      padding: 10px 12px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      color: #fff;
+      pointer-events: auto;
+      animation: toastIn 0.25s cubic-bezier(0.16,1,0.3,1);
+    }
+    .mac-toast.toast-out {
+      animation: toastOut 0.22s ease forwards;
+    }
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateX(30px) scale(0.96); }
+      to { opacity: 1; transform: translateX(0) scale(1); }
+    }
+    @keyframes toastOut {
+      from { opacity: 1; transform: translateX(0) scale(1); }
+      to { opacity: 0; transform: translateX(30px) scale(0.96); }
+    }
+    .toast-icon {
+      width: 26px; height: 26px; border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(180deg,#51a6f8,#157bfb);
+      font-size: 12px; flex-shrink: 0; margin-top: 1px;
+    }
+    .toast-title { font-size: 12.5px; font-weight: 600; }
+    .toast-body { font-size: 11.5px; color: rgba(255,255,255,0.65); margin-top: 1px; }
+    .notif-item {
+      background: rgba(255,255,255,0.07);
+      border-radius: 10px;
+      padding: 9px 10px;
+      font-size: 12px;
+    }
+    .notif-item .notif-title { font-weight: 600; font-size: 12.5px; }
+    .notif-item .notif-body { color: rgba(255,255,255,0.6); font-size: 11.5px; margin-top: 1px; }
+    .notif-item .notif-time { color: rgba(255,255,255,0.35); font-size: 10px; margin-top: 3px; }
 
     /* Custom App Icons Styling */
     .icon-finder { background: linear-gradient(180deg, #51a6f8 0%, #157bfb 100%); }
