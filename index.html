@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>macOS Sonoma Desktop</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css">
+</head>
+<body onclick="closeAllDropdowns(event)">
+<!-- ========================================================================
+     APPLE "HELLO" CURSIVE BOOT SCREEN
+     ======================================================================== -->
+<div class="boot-overlay" id="bootScreen" onclick="progressBootImmediately()">
+<!-- Mesh backdrop inside boot screen -->
+<div class="absolute inset-0 bg-gradient-to-tr from-emerald-950 via-slate-950 to-blue-950 opacity-90"></div>
+<div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.15),transparent_70%)]"></div>
+<!-- Top Skip Boot action button -->
+<button class="absolute top-8 right-8 z-20 px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md text-white/80 hover:text-white text-xs font-medium border border-white/15 transition flex items-center gap-1.5" onclick="skipBootSequence(event)">
+<span>Skip Boot</span>
+<i class="fa-solid fa-forward-step text-[11px]"></i>
+</button>
+<div class="relative z-10 flex flex-col items-center justify-center text-center px-6 max-w-xl">
+<!-- Apple Logo -->
+<div class="text-white/90 text-4xl mb-4 transition-transform hover:scale-105 duration-300">
+<i class="fa-brands fa-apple"></i>
+</div>
+<!-- Animated Multilingual Cursive Hello Text -->
+<div class="h-36 flex items-center justify-center">
+<span class="cursive-hello" id="cursiveGreeting">hello</span>
+</div>
+<!-- Boot Progress Indicator -->
+<div class="mt-8 flex flex-col items-center">
+<div class="boot-progress-track mb-3">
+<div class="boot-progress-bar" id="bootProgressBar"></div>
+</div>
+<div class="text-white/40 text-xs font-mono tracking-widest uppercase flex items-center gap-1.5" id="bootStatusText">
+<span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+        Starting macOS Sonoma...
+      </div>
+<div class="text-white/30 text-[11px] mt-2 tracking-tight">Click anywhere or press any key to enter</div>
+</div>
+</div>
+</div>
+<!-- ========================================================================
+     AUTHENTIC macOS SONOMA LOCK & LOGIN SCREEN
+     ======================================================================== -->
+<div class="lockscreen-overlay" id="lockScreen" onclick="focusLockInput()">
+<!-- Top Lock Screen Clock -->
+<div class="flex flex-col items-center mt-6">
+<div class="lock-time" id="lockClock">9:41</div>
+<div class="lock-date" id="lockDate">Tuesday, September 12</div>
+</div>
+<!-- Center User Login Avatar & Password Box -->
+<div class="flex flex-col items-center mb-8" onclick="event.stopPropagation()">
+<div class="lock-avatar-ring mb-3.5 relative group cursor-pointer" onclick="shakeLockScreen()">
+<img alt="User Avatar" data-profile-photo="true" class="w-full h-full rounded-full object-cover shadow-inner" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcwQS5EYygENpT9C3PAh1jSR4JBY5JMwpun6c7qmz2v2rXVo-iqSioh2qpqtP8B3qWre7UN8t-YD33-tbYL09SqetPcEwwV25ENn7xZHYDu0Z3R538Krca4WCHUH_kmcqXl7As535KkdsxUz53Hi7oOvq24nL8bleCqCsWOwbWEYNICzYgldbDIblt14WRlAWd0Fgg7aT8CbsGPNFCbNhqRJvsPjdFG2sn3Eztv6hxyTFiNhrtOV3K"/>
+<div class="absolute inset-0 rounded-full bg-black/10 group-hover:bg-transparent transition"></div>
+</div>
+<h1 class="text-white font-medium text-lg tracking-tight mb-3 drop-shadow-md">Pamarthi Avinash</h1>
+<!-- Password input pill -->
+<div class="lock-input-box relative flex items-center rounded-full px-3 py-1.5 w-56 transition-all duration-200" id="lockInputContainer">
+<input autocomplete="off" class="bg-transparent text-white text-xs font-medium placeholder-white/50 border-none outline-none focus:ring-0 w-full pl-1 caret-white" id="lockPasswordInput" onkeydown="handleLockInputKey(event)" placeholder="Enter Password" type="password"/>
+<button aria-label="Unlock macOS" class="w-6 h-6 rounded-full bg-white/30 hover:bg-white/50 active:scale-95 flex items-center justify-center text-white transition ml-1" id="unlockButton" onclick="attemptUnlock()">
+<i class="fa-solid fa-arrow-right text-[10px]"></i>
+</button>
+</div>
+<p class="text-white/40 text-[11px] mt-2 font-normal">Press Return or click arrow to log in</p>
+</div>
+<!-- Bottom Quick Actions: Sleep, Restart, Shut Down -->
+<div class="flex items-center gap-10 pb-4 text-white/70 text-xs">
+<div class="flex flex-col items-center gap-1 cursor-pointer hover:text-white transition group" onclick="sleepMac()">
+<div class="w-9 h-9 rounded-full bg-black/25 group-hover:bg-black/40 flex items-center justify-center text-sm border border-white/10">
+<i class="fa-solid fa-moon"></i>
+</div>
+<span class="text-[11px]">Sleep</span>
+</div>
+<div class="flex flex-col items-center gap-1 cursor-pointer hover:text-white transition group" onclick="rebootSequence()">
+<div class="w-9 h-9 rounded-full bg-black/25 group-hover:bg-black/40 flex items-center justify-center text-sm border border-white/10">
+<i class="fa-solid fa-rotate-right"></i>
+</div>
+<span class="text-[11px]">Restart</span>
+</div>
+<div class="flex flex-col items-center gap-1 cursor-pointer hover:text-white transition group" onclick="shutdownMac()">
+<div class="w-9 h-9 rounded-full bg-black/25 group-hover:bg-black/40 flex items-center justify-center text-sm border border-white/10">
+<i class="fa-solid fa-power-off"></i>
+</div>
+<span class="text-[11px]">Shut Down</span>
+</div>
+</div>
+</div>
+<!-- Animated Dynamic Sonoma Wallpaper -->
+<div class="wallpaper"></div>
+<div class="wallpaper-mesh"></div>
+<!-- Top macOS Menu Bar -->
+<header class="menubar" id="topMenuBar">
+<div class="flex items-center gap-0.5 relative">
+<!-- Apple Menu -->
+<div class="menu-item text-white text-[14px] font-semibold px-2" onclick="toggleMenu(event, 'appleDropdown')">
+<i class="fa-brands fa-apple"></i>
+<!-- Dropdown -->
+<div class="mac-menu-dropdown" id="appleDropdown">
+<div class="menu-row" onclick="openAboutModal(event)">
+<span>About This Mac</span>
+</div>
+<div class="menu-separator"></div>
+<div class="menu-row">
+<span>System Settings...</span>
+<span class="menu-shortcut">⌘,</span>
+</div>
+<div class="menu-row">
+<span>App Store...</span>
+<span class="menu-shortcut">5 updates</span>
+</div>
+<div class="menu-separator"></div>
+<div class="menu-row">
+<span>Recent Items</span>
+<span class="menu-shortcut">▶</span>
+</div>
+<div class="menu-separator"></div>
+<div class="menu-row">
+<span>Force Quit Finder</span>
+<span class="menu-shortcut">⌥⌘⎋</span>
+</div>
+<div class="menu-separator"></div>
+<div class="menu-row" onclick="sleepMac()">
+<span>Sleep</span>
+</div>
+<div class="menu-row" onclick="rebootSequence()">
+<span>Restart...</span>
+</div>
+<div class="menu-row" onclick="shutdownMac()">
+<span>Shut Down...</span>
+</div>
+<div class="menu-separator"></div>
+<div class="menu-row" onclick="lockDesktop()">
+<span>Lock Screen</span>
+<span class="menu-shortcut">^⌘Q</span>
+</div>
+</div>
+</div>
+<!-- App Name (Finder) -->
+<div class="menu-item font-semibold" onclick="toggleMenu(event, 'finderDropdown')">
+<span id="activeAppName">Finder</span>
+<!-- Finder Menu -->
+<div class="mac-menu-dropdown" id="finderDropdown">
+<div class="menu-row" onclick="openAboutModal(event)">
+<span>About Finder</span>
+</div>
+<div class="menu-separator"></div>
+<div class="menu-row" onclick="openFinderWindow(event)">
+<span>Open Finder Window</span>
+<span class="menu-shortcut">⌘N</span>
+</div>
+<div class="menu-row">
+<span>Settings...</span>
+<span class="menu-shortcut">⌘,</span>
+</div>
+<div class="menu-separator"></div>
+<div class="menu-row">
+<span>Empty Trash...</span>
+<span class="menu-shortcut">⇧⌘⌫</span>
+</div>
+<div class="menu-separator"></div>
+<div class="menu-row">
+<span>Hide Finder</span>
+<span class="menu-shortcut">⌘H</span>
+</div>
+<div class="menu-row">
+<span>Hide Others</span>
+<span class="menu-shortcut">⌥⌘H</span>
+</div>
+</div>
+</div>
+<!-- File -->
+<div class="menu-item" onclick="toggleMenu(event, 'fileDropdown')">
+        File
+        <div class="mac-menu-dropdown" id="fileDropdown">
+<div class="menu-row" onclick="openFinderWindow(event)">
+<span>New Finder Window</span>
+<span class="menu-shortcut">⌘N</span>
+</div>
+<div class="menu-row" onclick="createBrowserFile('folder')">
+<span>New Folder</span>
+<span class="menu-shortcut">⇧⌘N</span>
+</div>
+<div class="menu-row" onclick="createBrowserFile('file')">
+<span>New File</span>
+<span class="menu-shortcut">⌘N</span>
+</div>
+<div class="menu-row">
+<span>New Smart Folder</span>
+<span class="menu-shortcut">⌥⌘N</span>
+</div>
+<div class="menu-row">
+<span>New Tab</span>
+<span class="menu-shortcut">⌘T</span>
+</div>
+<div class="menu-row" onclick="chooseLocalDirectory()">
+<span>Open</span>
+<span class="menu-shortcut">⌘O</span>
+</div>
+<div class="menu-separator"></div>
+<div class="menu-row disabled">
+<span>Close Window</span>
+<span class="menu-shortcut">⌘W</span>
+</div>
+<div class="menu-row">
+<span>Get Info</span>
+<span class="menu-shortcut">⌘I</span>
+</div>
+</div>
+</div>
+<!-- Edit -->
+<div class="menu-item" onclick="toggleMenu(event, 'editDropdown')">
+        Edit
+        <div class="mac-menu-dropdown" id="editDropdown">
+<div class="menu-row disabled">
+<span>Undo</span>
+<span class="menu-shortcut">⌘Z</span>
+</div>
+<div class="menu-row disabled">
+<span>Redo</span>
+<span class="menu-shortcut">⇧⌘Z</span>
+</div>
+<div class="menu-separator"></div>
+<div class="menu-row">
+<span>Cut</span>
+<span class="menu-shortcut">⌘X</span>
+</div>
+<div class="menu-row">
+<span>Copy</span>
+<span class="menu-shortcut">⌘C</span>
+</div>
+<div class="menu-row">
+<span>Paste</span>
+<span class="menu-shortcut">⌘V</span>
+</div>
+<div class="menu-row">
+<span>Select All</span>
+<span class="menu-shortcut">⌘A</span>
+</div>
+</div>
+</div>
+<!-- View -->
+<div class="menu-item" onclick="toggleMenu(event, 'viewDropdown')">
+        View
+        <div class="mac-menu-dropdown" id="viewDropdown">
+<div class="menu-row" onclick="setFinderView('icons')">
+<span>as Icons</span>
+<span class="menu-shortcut">⌘1</span>
+</div>
+<div class="menu-row" onclick="setFinderView('list')">
+<span>as List</span>
+<span class="menu-shortcut">⌘2</span>
+</div>
+<div class="menu-row">
+<span>as Columns</span>
+<span class="menu-shortcut">⌘3</span>
+</div>
+<div class="menu-row">
+<span>as Gallery</span>
+<span class="menu-shortcut">⌘4</span>
+</div>
+<div class="menu-separator"></div>
+<div class="menu-row">
+<span>Show Path Bar</span>
+</div>
+<div class="menu-row">
+<span>Show Status Bar</span>
+</div>
+<div class="menu-separator"></div>
+<div class="menu-row" onclick="toggleWallpaperHue()">
+<span>Switch Wallpaper Hue</span>
+<span class="menu-shortcut">^H</span>
+</div>
+</div>
+</div>
+<!-- Go -->
+<div class="menu-item" onclick="toggleMenu(event, 'goDropdown')">
+        Go
+        <div class="mac-menu-dropdown" id="goDropdown">
+<div class="menu-row" onclick="navigateFinderCategory('recents')">
+<span>Recents</span>
+<span class="menu-shortcut">⇧⌘F</span>
+</div>
+<div class="menu-row" onclick="navigateFinderCategory('documents')">
+<span>Documents</span>
+<span class="menu-shortcut">⇧⌘O</span>
+</div>
+<div class="menu-row" onclick="navigateFinderCategory('desktop')">
+<span>Desktop</span>
+<span class="menu-shortcut">⇧⌘D</span>
+</div>
+<div class="menu-row" onclick="navigateFinderCategory('downloads')">
+<span>Downloads</span>
+<span class="menu-shortcut">⌥⌘L</span>
+</div>
+<div class="menu-row" onclick="navigateFinderCategory('applications')">
+<span>Applications</span>
+<span class="menu-shortcut">⇧⌘A</span>
+</div>
+<div class="menu-row" onclick="navigateFinderCategory('airdrop')">
+<span>AirDrop</span>
+<span class="menu-shortcut">⇧⌘R</span>
+</div>
+<div class="menu-separator"></div>
+<div class="menu-row" onclick="toggleApp('terminalWindow')">
+<span>Utilities (Terminal)</span>
+<span class="menu-shortcut">⇧⌘U</span>
+</div>
+</div>
+</div>
+<!-- Window -->
+<div class="menu-item" onclick="toggleMenu(event, 'windowDropdown')">
+        Window
+        <div class="mac-menu-dropdown" id="windowDropdown">
+<div class="menu-row" onclick="minimizeActiveWindow()">
+<span>Minimize</span>
+<span class="menu-shortcut">⌘M</span>
+</div>
+<div class="menu-row" onclick="maximizeActiveWindow()">
+<span>Zoom</span>
+</div>
+<div class="menu-separator"></div>
+<div class="menu-row" onclick="bringToFront('finderExplorerWindow')">
+<span>Finder — Explorer</span>
+</div>
+<div class="menu-row" onclick="bringToFront('terminalWindow')">
+<span>Terminal — zsh</span>
+</div>
+</div>
+</div>
+<!-- Help -->
+<div class="menu-item" onclick="toggleMenu(event, 'helpDropdown')">
+        Help
+        <div class="mac-menu-dropdown" id="helpDropdown">
+<div class="px-2 py-1.5">
+<input class="w-full bg-white/10 border border-white/20 rounded px-2 py-1 text-xs outline-none text-white placeholder-white/50" placeholder="Search Help" type="text"/>
+</div>
+<div class="menu-separator"></div>
+<div class="menu-row" onclick="showHelpInTerminal()">
+<span>macOS Help Guide</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Menu Bar Status Icons -->
+<div class="flex items-center gap-3">
+<!-- Battery Status -->
+<div class="flex items-center gap-1.5 cursor-pointer menu-item py-1" title="Battery: 94% (Power Adapter)">
+<i class="fa-solid fa-battery-three-quarters text-[13px] text-white/90"></i>
+<span class="text-[11px] font-medium hidden sm:inline">94%</span>
+</div>
+<!-- Wi-Fi Status with Animation & Popover Toggle -->
+<div class="flex items-center gap-2 cursor-pointer menu-item py-1" id="wifiMenuBtn" onclick="toggleWifiPopover(event)" title="Wi-Fi: Connected to Apple_5G_Ultra">
+<i class="fa-solid fa-wifi text-[12px] wifi-anim-pulse text-emerald-300"></i>
+</div>
+<!-- Spotlight Search Trigger Icon -->
+<div class="flex items-center gap-2 cursor-pointer menu-item py-1" onclick="toggleSpotlight(event)" title="Spotlight Search (⌘+K)">
+<i class="fa-solid fa-magnifying-glass text-[12px]"></i>
+</div>
+<!-- Control Center Icon -->
+<div class="flex items-center gap-2 cursor-pointer menu-item py-1" id="controlCenterBtn" onclick="toggleControlCenter(event)" title="Control Center">
+<svg class="w-3.5 h-3.5 fill-current" viewbox="0 0 24 24">
+<path d="M4 6h16a1 1 0 0 0 0-2H4a1 1 0 0 0 0 2zm0 7h16a1 1 0 0 0 0-2H4a1 1 0 0 0 0 2zm0 7h16a1 1 0 0 0 0-2H4a1 1 0 0 0 0 2z"></path>
+</svg>
+</div>
+<!-- Live Clock -->
+<div class="menu-item text-[12px] tracking-tight font-medium cursor-pointer" id="liveClock" onclick="lockDesktop()">
+        Tue Sep 12 9:41 AM
+      </div>
+</div>
+</header>
+<!-- Wi-Fi Frosted Glass Popover -->
+<div class="mac-popover w-[320px] p-3 text-white" id="wifiPopover" onclick="event.stopPropagation()">
+<div class="flex items-center justify-between pb-2 mb-2 border-b border-white/10">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-blue-500/80 flex items-center justify-center text-white text-xs">
+<i class="fa-solid fa-wifi"></i>
+</div>
+<div>
+<div class="text-xs font-semibold leading-tight">Wi-Fi</div>
+<div class="text-[10px] text-emerald-400 font-medium flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+            Connected
+          </div>
+</div>
+</div>
+<!-- Toggle Switch -->
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" id="wifiPowerToggle" onchange="toggleWifiPower(this)" type="checkbox"/>
+<div class="w-8 h-4 bg-white/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3 after:w-3.5 after:transition-all peer-checked:bg-blue-500"></div>
+</label>
+</div>
+<!-- Connected Network Box -->
+<div id="wifiNetworkContent">
+<div class="text-[11px] font-semibold text-white/50 uppercase tracking-wider px-1 mb-1">Known Network</div>
+<div class="flex items-center justify-between p-2 rounded-lg bg-white/10 hover:bg-white/15 cursor-pointer transition">
+<div class="flex items-center gap-2.5">
+<div class="text-blue-400 text-sm"><i class="fa-solid fa-check"></i></div>
+<div>
+<div class="text-xs font-medium text-white flex items-center gap-1.5">
+<span id="currentWifiSsid">Apple_Park_5G_Campus</span>
+<i class="fa-solid fa-lock text-[9px] text-white/40"></i>
+</div>
+<div class="text-[10px] text-white/60">IP: 192.168.1.104 · 866 Mbps</div>
+</div>
+</div>
+<div class="flex items-center gap-1 text-emerald-400">
+<span class="inline-block w-1 h-2 bg-emerald-400 rounded-sm"></span>
+<span class="inline-block w-1 h-3 bg-emerald-400 rounded-sm"></span>
+<span class="inline-block w-1 h-4 bg-emerald-400 rounded-sm"></span>
+</div>
+</div>
+<!-- Other Networks -->
+<div class="flex items-center justify-between text-[11px] font-semibold text-white/50 uppercase tracking-wider px-1 mt-3 mb-1">
+<span>Other Networks</span>
+<span class="text-[10px] text-blue-400 cursor-pointer hover:underline" onclick="scanWifiNetworks()">
+<i class="fa-solid fa-arrows-rotate text-[9px]" id="wifiRefreshIcon"></i> Refresh
+        </span>
+</div>
+<div class="space-y-1 max-h-[160px] overflow-y-auto pr-0.5" id="availableNetworksList">
+<div class="flex items-center justify-between p-2 rounded-lg hover:bg-white/10 cursor-pointer transition" onclick="switchNetwork('Starbucks_Guest_HighSpeed')">
+<div class="flex items-center gap-2">
+<i class="fa-solid fa-wifi text-xs text-white/60"></i>
+<span class="text-xs text-white/90">Starbucks_Guest_HighSpeed</span>
+</div>
+<div class="flex items-center gap-1 text-white/40">
+<span class="inline-block w-1 h-2 bg-white/70 rounded-sm"></span>
+<span class="inline-block w-1 h-3 bg-white/70 rounded-sm"></span>
+<span class="inline-block w-1 h-4 bg-white/20 rounded-sm"></span>
+</div>
+</div>
+<div class="flex items-center justify-between p-2 rounded-lg hover:bg-white/10 cursor-pointer transition" onclick="switchNetwork('Studio_Audio_Production')">
+<div class="flex items-center gap-2">
+<i class="fa-solid fa-wifi text-xs text-white/60"></i>
+<span class="text-xs text-white/90">Studio_Audio_Production</span>
+<i class="fa-solid fa-lock text-[9px] text-white/40"></i>
+</div>
+<div class="flex items-center gap-1 text-white/40">
+<span class="inline-block w-1 h-2 bg-white/70 rounded-sm"></span>
+<span class="inline-block w-1 h-3 bg-white/70 rounded-sm"></span>
+<span class="inline-block w-1 h-4 bg-white/70 rounded-sm"></span>
+</div>
+</div>
+<div class="flex items-center justify-between p-2 rounded-lg hover:bg-white/10 cursor-pointer transition" onclick="switchNetwork('iPhone (Personal Hotspot)')">
+<div class="flex items-center gap-2">
+<i class="fa-solid fa-link text-xs text-white/60"></i>
+<span class="text-xs text-white/90">Avinash's iPhone Hotspot</span>
+</div>
+<span class="text-[10px] text-emerald-400 font-mono">5G</span>
+</div>
+</div>
+<div class="pt-2 mt-2 border-t border-white/10 flex justify-between items-center text-[11px] text-white/70 px-1">
+<span class="hover:text-white cursor-pointer" onclick="alert('Opening Wi-Fi Network Preferences...')">Network Settings...</span>
+<span class="text-[10px] text-white/40">WPA3 Personal</span>
+</div>
+</div>
+</div>
+<!-- Control Center Popover -->
+<div class="mac-popover w-[300px] p-3 text-white" id="controlCenterPopover" onclick="event.stopPropagation()">
+<div class="grid grid-cols-2 gap-2 mb-2">
+<div class="bg-white/10 rounded-xl p-2.5 flex items-center gap-3 cursor-pointer hover:bg-white/15" onclick="toggleWifiPopover(event)">
+<div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white"><i class="fa-solid fa-wifi"></i></div>
+<div>
+<div class="text-xs font-semibold">Wi-Fi</div>
+<div class="text-[10px] text-white/60">Connected</div>
+</div>
+</div>
+<div class="bg-white/10 rounded-xl p-2.5 flex items-center gap-3 cursor-pointer hover:bg-white/15" onclick="toggleBluetoothState(this)">
+<div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white" id="btIcon"><i class="fa-brands fa-bluetooth-b"></i></div>
+<div>
+<div class="text-xs font-semibold">Bluetooth</div>
+<div class="text-[10px] text-white/60" id="btState">AirPods Pro</div>
+</div>
+</div>
+</div>
+<!-- Brightness & Sound sliders -->
+<div class="bg-white/10 rounded-xl p-3 space-y-3">
+<div>
+<div class="flex justify-between text-[11px] text-white/70 mb-1">
+<span>Display Brightness</span>
+<i class="fa-solid fa-sun text-xs"></i>
+</div>
+<input class="w-full accent-white cursor-pointer h-1.5 bg-white/20 rounded-lg" id="brightnessControl" max="100" min="30" oninput="setDisplayBrightness(this.value)" type="range" value="95"/>
+</div>
+<div>
+<div class="flex justify-between text-[11px] text-white/70 mb-1">
+<span>Sound Volume</span>
+<i class="fa-solid fa-volume-high text-xs"></i>
+</div>
+<input class="w-full accent-white cursor-pointer h-1.5 bg-white/20 rounded-lg" id="volumeControl" max="100" min="0" oninput="setPageVolume(this.value)" type="range" value="75"/>
+</div>
+</div>
+</div>
+<!-- Spotlight Search Modal Overlay -->
+<div class="spotlight-backdrop" id="spotlightOverlay" onclick="closeSpotlight(event)">
+<div class="spotlight-window" onclick="event.stopPropagation()">
+<div class="flex items-center px-4 py-3.5 border-b border-white/10">
+<i class="fa-solid fa-magnifying-glass text-slate-400 text-lg mr-3"></i>
+<input autocomplete="off" class="w-full bg-transparent text-lg text-white font-light placeholder-slate-400 outline-none border-none focus:ring-0" id="spotlightInput" oninput="handleSpotlightSearch(this.value)" placeholder="Spotlight Search" type="text"/>
+<span class="text-[11px] text-white/40 border border-white/20 px-1.5 py-0.5 rounded ml-2">ESC</span>
+</div>
+<!-- Quick Results / Suggestions -->
+<div class="p-2 max-h-[380px] overflow-y-auto" id="spotlightResults">
+<div class="text-[11px] font-semibold text-white/40 uppercase tracking-wider px-3 py-1.5">Top Hits &amp; Applications</div>
+<div class="spot-item flex items-center justify-between p-2 rounded-lg hover:bg-blue-600/80 cursor-pointer group transition" onclick="spotlightLaunch('terminal')">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-zinc-900 border border-zinc-700 flex items-center justify-center text-emerald-400 text-sm font-mono font-bold">&gt;_</div>
+<div>
+<div class="text-sm font-medium text-white group-hover:text-white">Terminal</div>
+<div class="text-[11px] text-white/50 group-hover:text-white/80">Developer Shell &amp; Utilities</div>
+</div>
+</div>
+<span class="text-xs text-white/40 group-hover:text-white/90">Press ↵</span>
+</div>
+<div class="spot-item flex items-center justify-between p-2 rounded-lg hover:bg-blue-600/80 cursor-pointer group transition" onclick="spotlightLaunch('finder')">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white text-sm"><i class="fa-regular fa-folder-open"></i></div>
+<div>
+<div class="text-sm font-medium text-white group-hover:text-white">Finder File Explorer</div>
+<div class="text-[11px] text-white/50 group-hover:text-white/80">Browse Projects, Documents &amp; Downloads</div>
+</div>
+</div>
+<span class="text-xs text-white/40 group-hover:text-white/90">App</span>
+</div>
+<div class="spot-item flex items-center justify-between p-2 rounded-lg hover:bg-blue-600/80 cursor-pointer group transition" onclick="spotlightLaunch('safari')">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-sky-400 to-blue-500 flex items-center justify-center text-white text-sm"><i class="fa-regular fa-compass"></i></div>
+<div>
+<div class="text-sm font-medium text-white group-hover:text-white">Safari Web Browser</div>
+<div class="text-[11px] text-white/50 group-hover:text-white/80">Surf the web with WebKit</div>
+</div>
+</div>
+<span class="text-xs text-white/40 group-hover:text-white/90">App</span>
+</div>
+<div class="text-[11px] font-semibold text-white/40 uppercase tracking-wider px-3 py-1.5 mt-2">Calculations &amp; Actions</div>
+<div class="spot-item flex items-center justify-between p-2 rounded-lg hover:bg-blue-600/80 cursor-pointer group transition" onclick="spotlightLaunch('theme')">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-amber-500 flex items-center justify-center text-white text-sm"><i class="fa-solid fa-palette"></i></div>
+<div>
+<div class="text-sm font-medium text-white group-hover:text-white">Toggle Dynamic Wallpaper Mood</div>
+<div class="text-[11px] text-white/50 group-hover:text-white/80">System Theme / Lighting effect</div>
+</div>
+</div>
+<span class="text-xs text-white/40 group-hover:text-white/90">Action</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Interactive Finder / File Explorer Window -->
+<div class="mac-window w-[760px] h-[480px] left-[20%] top-[14%]" id="finderExplorerWindow" onclick="bringToFront('finderExplorerWindow')">
+<div class="window-header flex items-center justify-between" id="finderHeader">
+<div class="window-controls">
+<div class="win-btn win-close" onclick="closeWindow('finderExplorerWindow')" title="Close">
+<i class="fa-solid fa-xmark opacity-0 hover:opacity-100 text-[7px]"></i>
+</div>
+<div class="win-btn win-min" onclick="minimizeWindow('finderExplorerWindow')" title="Minimize">
+<i class="fa-solid fa-minus opacity-0 hover:opacity-100 text-[7px]"></i>
+</div>
+<div class="win-btn win-max" onclick="maximizeWindow('finderExplorerWindow')" title="Maximize">
+<i class="fa-solid fa-expand opacity-0 hover:opacity-100 text-[6px]"></i>
+</div>
+</div>
+<!-- Navigation & View Toggles -->
+<div class="flex items-center gap-4 text-white/80 text-xs">
+<div class="flex items-center gap-1.5">
+<button class="w-6 h-6 rounded bg-white/10 hover:bg-white/20 flex items-center justify-center" onclick="finderHistoryBack()" title="Back"><i class="fa-solid fa-chevron-left text-[10px]"></i></button>
+<button class="w-6 h-6 rounded bg-white/10 hover:bg-white/20 flex items-center justify-center" onclick="finderHistoryForward()" title="Forward"><i class="fa-solid fa-chevron-right text-[10px]"></i></button>
+</div>
+<span class="font-semibold text-white/90 tracking-wide text-xs" id="finderPathTitle">Desktop</span>
+<!-- View mode buttons -->
+<div class="flex items-center bg-black/30 rounded-md p-0.5 border border-white/10">
+<button class="px-2 py-0.5 rounded text-white text-[11px] bg-white/20" id="viewBtnIcons" onclick="setFinderView('icons')"><i class="fa-solid fa-grip"></i></button>
+<button class="px-2 py-0.5 rounded text-white/60 hover:text-white text-[11px]" id="viewBtnList" onclick="setFinderView('list')"><i class="fa-solid fa-list"></i></button>
+</div>
+</div>
+<!-- Finder Search -->
+<div class="relative">
+<i class="fa-solid fa-magnifying-glass absolute left-2 top-2 text-[10px] text-white/40"></i>
+<input class="bg-black/30 text-white text-xs pl-6 pr-2 py-1 rounded-md border border-white/15 outline-none w-28 focus:w-36 transition-all placeholder-white/40" id="finderFilterInput" oninput="filterFinderFiles(this.value)" placeholder="Search" type="text"/>
+</div>
+</div>
+<!-- Explorer Layout: Sidebar + Main Content -->
+<div class="flex h-[calc(100%-38px)] bg-slate-900/90 text-white">
+<!-- Sidebar -->
+<div class="w-48 bg-black/25 backdrop-blur-md border-r border-white/10 p-3 flex flex-col justify-between">
+<div class="space-y-4">
+<div>
+<div class="text-[10px] font-semibold text-white/40 uppercase tracking-wider px-2 mb-1">Favorites</div>
+<div class="space-y-0.5">
+<div class="finder-sidebar-item" onclick="navigateFinderCategory('airdrop')">
+<i class="fa-solid fa-satellite-dish text-blue-400 text-xs w-4"></i> AirDrop
+              </div>
+<div class="finder-sidebar-item" onclick="navigateFinderCategory('recents')">
+<i class="fa-regular fa-clock text-blue-400 text-xs w-4"></i> Recents
+              </div>
+<div class="finder-sidebar-item" onclick="navigateFinderCategory('applications')">
+<i class="fa-solid fa-shapes text-blue-400 text-xs w-4"></i> Applications
+              </div>
+<div class="finder-sidebar-item active" id="sideDesktop" onclick="navigateFinderCategory('desktop')">
+<i class="fa-solid fa-desktop text-blue-400 text-xs w-4"></i> Desktop
+              </div>
+<div class="finder-sidebar-item" id="sideDocuments" onclick="navigateFinderCategory('documents')">
+<i class="fa-regular fa-file-lines text-blue-400 text-xs w-4"></i> Documents
+              </div>
+<div class="finder-sidebar-item" id="sideDownloads" onclick="navigateFinderCategory('downloads')">
+<i class="fa-solid fa-download text-blue-400 text-xs w-4"></i> Downloads
+              </div>
+</div>
+</div>
+<div>
+<div class="text-[10px] font-semibold text-white/40 uppercase tracking-wider px-2 mb-1">iCloud</div>
+<div class="space-y-0.5">
+<div class="finder-sidebar-item" onclick="navigateFinderCategory('icloud')">
+<i class="fa-solid fa-cloud text-sky-400 text-xs w-4"></i> iCloud Drive
+              </div>
+</div>
+</div>
+</div>
+<div class="text-[11px] text-white/40 px-2 flex items-center justify-between border-t border-white/10 pt-2">
+<span>Storage</span>
+<span class="text-white/70 font-mono">412 GB Free</span>
+</div>
+</div>
+<!-- Main Files Workspace -->
+<div class="flex-1 flex flex-col bg-slate-900/60 overflow-hidden">
+<!-- Status breadcrumb -->
+<div class="px-4 py-1.5 bg-black/20 border-b border-white/5 text-[11px] text-white/60 flex items-center justify-between">
+<div class="flex items-center gap-1.5" id="breadcrumbNav">
+<span>Macintosh HD</span>
+<span class="text-white/30">&gt;</span>
+<span>Users</span>
+<span class="text-white/30">&gt;</span>
+<span>avinash</span>
+<span class="text-white/30">&gt;</span>
+<span class="text-white font-medium" id="bcCurrent">Desktop</span>
+</div>
+<span class="text-[11px] text-white/50" id="itemCountLabel">6 items</span>
+</div>
+<!-- Files Container (Grid or List) -->
+<div class="flex-1 p-4 overflow-y-auto" id="filesContainer">
+<div class="grid grid-cols-4 sm:grid-cols-5 gap-3" id="fileGrid">
+<!-- Dynamically populated via JS -->
+</div>
+</div>
+<!-- File Preview Info Bar -->
+<div class="px-4 py-1.5 bg-black/30 border-t border-white/10 text-xs text-white/70 flex items-center justify-between" id="fileFooterStatus">
+<span id="selectedFileDetail">Select an item to view details</span>
+<span class="text-[11px] text-white/40">Liquid Sonoma APFS</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Interactive Terminal Window (Opened from Dock) -->
+<div class="mac-window active-window w-[680px] h-[440px] left-[15%] top-[12%]" id="terminalWindow" onclick="bringToFront('terminalWindow')">
+<div class="window-header" id="terminalHeader">
+<div class="window-controls">
+<div class="win-btn win-close" onclick="closeWindow('terminalWindow')" title="Close">
+<i class="fa-solid fa-xmark opacity-0 hover:opacity-100 text-[7px]"></i>
+</div>
+<div class="win-btn win-min" onclick="minimizeWindow('terminalWindow')" title="Minimize">
+<i class="fa-solid fa-minus opacity-0 hover:opacity-100 text-[7px]"></i>
+</div>
+<div class="win-btn win-max" onclick="maximizeWindow('terminalWindow')" title="Maximize">
+<i class="fa-solid fa-expand opacity-0 hover:opacity-100 text-[6px]"></i>
+</div>
+</div>
+<div class="win-title">
+<i class="fa-solid fa-terminal text-[11px] mr-2 opacity-60"></i> avinashcreates — zsh — 80×24
+      </div>
+</div>
+<div class="terminal-body" id="termOutput" onclick="document.getElementById('terminalInput').focus()">
+<div class="text-gray-400 mb-2 font-mono text-[12px]">Last login: <span id="lastLoginTime">Tue Sep 12 09:41:00</span> on ttys001</div>
+<div class="text-emerald-400 font-semibold mb-1">➜  ~ macOS Sonoma Interactive Shell ready.</div>
+<div class="text-gray-300 text-[12px] mb-3 leading-relaxed">
+        Type <span class="text-yellow-400 font-bold">help</span>, <span class="text-cyan-400">whoami</span>, <span class="text-pink-400">skills</span>, <span class="text-emerald-400">finder</span>, <span class="text-blue-400">wifi</span>, <span class="text-purple-400">lock</span>, <span class="text-red-400">clear</span>, or test desktop features!
+      </div>
+<div id="commandHistory"></div>
+<div class="flex items-center gap-2 mt-1">
+<span class="text-emerald-400 font-bold">➜</span>
+<span class="text-cyan-400 font-medium">~</span>
+<input autocomplete="off" autofocus="" class="bg-transparent border-none outline-none text-white font-mono flex-1 caret-emerald-400 text-[13px]" id="terminalInput" spellcheck="false" type="text"/>
+</div>
+</div>
+</div>
+<!-- Interactive About This Mac Modal -->
+<div class="mac-window w-[500px] h-[340px] left-[35%] top-[20%] hidden" id="finderWindow" onclick="bringToFront('finderWindow')">
+<div class="window-header" id="finderAboutHeader">
+<div class="window-controls">
+<div class="win-btn win-close" onclick="closeWindow('finderWindow')" title="Close"></div>
+<div class="win-btn win-min" onclick="minimizeWindow('finderWindow')" title="Minimize"></div>
+<div class="win-btn win-max" onclick="maximizeWindow('finderWindow')"></div>
+</div>
+<div class="win-title">About This Mac</div>
+</div>
+<div class="p-6 bg-slate-900/95 text-white flex flex-col items-center justify-center h-[calc(100%-38px)] text-center">
+<div class="w-16 h-16 rounded-full bg-gradient-to-tr from-emerald-500 to-sky-400 flex items-center justify-center text-3xl mb-3 shadow-lg shadow-emerald-500/25">
+<i class="fa-brands fa-apple"></i>
+</div>
+<h2 class="text-xl font-bold">macOS Sonoma</h2>
+<p class="text-xs text-slate-400 mt-1">Version 14.5 (Liquid Interactive Release)</p>
+<div class="mt-4 text-xs text-slate-300 bg-white/5 px-4 py-3 rounded-xl border border-white/10 w-full max-w-[340px] text-left space-y-1.5">
+<div class="flex justify-between"><span>Chip</span><span class="font-semibold text-white">Apple M3 Max (16-Core)</span></div>
+<div class="flex justify-between"><span>Memory</span><span class="font-semibold text-white">64 GB Unified LPDDR5</span></div>
+<div class="flex justify-between"><span>Startup Disk</span><span class="font-semibold text-white">Sonoma APFS Flash</span></div>
+<div class="flex justify-between"><span>Display</span><span class="font-semibold text-white">Liquid Retina XDR (120Hz)</span></div>
+</div>
+</div>
+</div>
+<!-- Browser-backed app window for Launchpad, Safari, Maps, Calendar, Music, Settings and Trash -->
+<div class="mac-window w-[620px] h-[420px] left-[28%] top-[17%] hidden" id="systemAppWindow" onclick="bringToFront('systemAppWindow')">
+<div class="window-header" id="systemAppHeader">
+<div class="window-controls">
+<div class="win-btn win-close" onclick="closeWindow('systemAppWindow')"><i class="fa-solid fa-xmark opacity-0 hover:opacity-100 text-[7px]"></i></div>
+<div class="win-btn win-min" onclick="minimizeWindow('systemAppWindow')"><i class="fa-solid fa-minus opacity-0 hover:opacity-100 text-[7px]"></i></div>
+<div class="win-btn win-max" onclick="maximizeWindow('systemAppWindow')"><i class="fa-solid fa-expand opacity-0 hover:opacity-100 text-[6px]"></i></div>
+</div>
+<div class="win-title !justify-start pl-40" id="systemAppTitle">Application</div>
+<div class="absolute right-3 top-1 flex items-center gap-1" id="systemAppTabs"></div>
+</div>
+<div class="h-[calc(100%-38px)] overflow-y-auto bg-slate-900/95 text-white p-5" id="systemAppContent"></div>
+</div>
+<!-- Bottom macOS Dock with Parabolic Magnification & Floating Tooltips -->
+<div class="dock-container">
+<div class="dock" id="macosDock">
+<!-- Finder -->
+<div class="dock-item" data-app="finder" onclick="handleDockClick('finder', 'finderExplorerWindow', event)">
+<span class="dock-tooltip">Finder</span>
+<div class="dock-icon icon-finder">
+<svg class="w-8 h-8 text-white fill-current" viewbox="0 0 24 24">
+<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5c-2.49 0-4.5-2.01-4.5-4.5S8.51 7.5 11 7.5s4.5 2.01 4.5 4.5-2.01 4.5-4.5 4.5z"></path>
+</svg>
+</div>
+<div class="dock-dot" id="finderDockDot"></div>
+</div>
+<!-- Launchpad -->
+<div class="dock-item" data-app="launchpad" onclick="openRealApp('launchpad', this)">
+<span class="dock-tooltip">Launchpad</span>
+<div class="dock-icon icon-launchpad">
+<i class="fa-solid fa-shapes text-xl text-slate-200"></i>
+</div>
+</div>
+<!-- Safari -->
+<div class="dock-item" data-app="safari" onclick="openRealApp('safari', this)">
+<span class="dock-tooltip">Safari</span>
+<div class="dock-icon icon-safari">
+<i class="fa-regular fa-compass text-2xl text-blue-600"></i>
+</div>
+<div class="dock-dot"></div>
+</div>
+<!-- Messages -->
+<div class="dock-item" data-app="messages" onclick="bounceDockItem(this)">
+<span class="dock-tooltip">Messages</span>
+<div class="dock-icon icon-messages">
+<i class="fa-solid fa-comment text-2xl text-white"></i>
+</div>
+</div>
+<!-- Mail -->
+<div class="dock-item" data-app="mail" onclick="bounceDockItem(this)">
+<span class="dock-tooltip">Mail</span>
+<div class="dock-icon icon-mail">
+<i class="fa-solid fa-envelope text-xl text-white"></i>
+</div>
+</div>
+<!-- Maps -->
+<div class="dock-item" data-app="maps" onclick="openRealApp('maps', this)">
+<span class="dock-tooltip">Maps</span>
+<div class="dock-icon icon-maps">
+<i class="fa-solid fa-location-dot text-2xl text-emerald-600"></i>
+</div>
+</div>
+<!-- Photos -->
+<div class="dock-item" data-app="photos" onclick="bounceDockItem(this)">
+<span class="dock-tooltip">Photos</span>
+<div class="dock-icon icon-photos">
+<i class="fa-solid fa-sun text-2xl text-white"></i>
+</div>
+</div>
+<!-- FaceTime -->
+<div class="dock-item" data-app="facetime" onclick="bounceDockItem(this)">
+<span class="dock-tooltip">FaceTime</span>
+<div class="dock-icon icon-facetime">
+<i class="fa-solid fa-video text-xl text-white"></i>
+</div>
+</div>
+<!-- Calendar -->
+<div class="dock-item" data-app="calendar" onclick="openRealApp('calendar', this)">
+<span class="dock-tooltip">Calendar</span>
+<div class="dock-icon icon-calendar flex flex-col items-center justify-center p-1">
+<span class="text-[9px] font-bold uppercase text-red-500 tracking-wider">SEP</span>
+<span class="text-xl font-bold leading-none text-slate-900" id="dockCalDay">12</span>
+</div>
+</div>
+<!-- Notes -->
+<div class="dock-item" data-app="notes" onclick="bounceDockItem(this)">
+<span class="dock-tooltip">Notes</span>
+<div class="dock-icon icon-notes">
+<i class="fa-solid fa-note-sticky text-xl"></i>
+</div>
+</div>
+<!-- Terminal (App) -->
+<div class="dock-item" data-app="terminal" onclick="handleDockClick('terminal', 'terminalWindow', event)">
+<span class="dock-tooltip">Terminal</span>
+<div class="dock-icon icon-terminal">
+<span class="text-emerald-400 font-mono text-[14px] font-bold">&gt;_</span>
+</div>
+<div class="dock-dot"></div>
+</div>
+<!-- Music -->
+<div class="dock-item" data-app="music" onclick="openRealApp('music', this)">
+<span class="dock-tooltip">Music</span>
+<div class="dock-icon icon-music">
+<i class="fa-solid fa-music text-xl text-white"></i>
+</div>
+</div>
+<!-- Settings -->
+<div class="dock-item" data-app="settings" onclick="openRealApp('settings', this)">
+<span class="dock-tooltip">System Settings</span>
+<div class="dock-icon icon-settings">
+<i class="fa-solid fa-gear text-2xl text-slate-200"></i>
+</div>
+</div>
+<!-- Dock Divider -->
+<div class="dock-divider"></div>
+<!-- Downloads Folder -->
+<div class="dock-item" data-app="downloads" onclick="navigateFinderCategory('downloads'); openFinderWindow()">
+<span class="dock-tooltip">Downloads</span>
+<div class="dock-icon bg-gradient-to-tr from-sky-400 to-blue-600">
+<i class="fa-solid fa-folder-closed text-2xl text-white"></i>
+</div>
+</div>
+<!-- Trash -->
+<div class="dock-item" data-app="trash" onclick="openRealApp('trash', this)">
+<span class="dock-tooltip">Trash</span>
+<div class="dock-icon icon-trash">
+<i class="fa-solid fa-trash-can text-xl text-slate-700"></i>
+</div>
+</div>
+</div>
+</div>
+<script src="script.js"></script>
+</body></html>
