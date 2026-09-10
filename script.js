@@ -441,13 +441,19 @@
     }
 
     const appWindowTemplates = {
-      launchpad: ['Launchpad', '<div class="grid grid-cols-4 gap-4 text-center text-xs"><button class="p-4 rounded-xl bg-white/10 hover:bg-white/20" onclick="openFinderWindow()"><i class="fa-solid fa-folder-open text-2xl mb-2"></i><br>Finder</button><button class="p-4 rounded-xl bg-white/10 hover:bg-white/20" onclick="toggleApp(\'terminalWindow\')"><i class="fa-solid fa-terminal text-2xl mb-2"></i><br>Terminal</button><button class="p-4 rounded-xl bg-white/10 hover:bg-white/20" onclick="openRealApp(\'portfolio\')"><i class="fa-solid fa-id-card text-2xl mb-2"></i><br>Portfolio</button><button class="p-4 rounded-xl bg-white/10 hover:bg-white/20" onclick="openRealApp(\'contact\')"><i class="fa-solid fa-address-book text-2xl mb-2"></i><br>Contact</button><button class="p-4 rounded-xl bg-white/10 hover:bg-white/20" onclick="openRealApp(\'settings\')"><i class="fa-solid fa-gear text-2xl mb-2"></i><br>Settings</button><button class="p-4 rounded-xl bg-white/10 hover:bg-white/20" onclick="openRealApp(\'calendar\')"><i class="fa-solid fa-calendar text-2xl mb-2"></i><br>Calendar</button></div>'],
-      portfolio: ['Portfolio', '<div class="space-y-5"><div><p class="text-cyan-300 text-xs uppercase tracking-[0.25em]">Pamarthi Avinash</p><h1 class="text-3xl font-semibold mt-2">Fullstack Engineer · AI Enthusiast</h1><p class="text-white/65 mt-2 max-w-xl">I build responsive, thoughtful interfaces and practical products with modern web technologies.</p></div><div class="grid grid-cols-2 gap-3"><div class="p-4 rounded-xl bg-white/10"><h2 class="font-semibold">Projects</h2><p class="text-white/60 text-sm mt-1">Interactive Apple Web OS, portfolio systems, and AI-powered products.</p></div><div class="p-4 rounded-xl bg-white/10"><h2 class="font-semibold">Stack</h2><p class="text-white/60 text-sm mt-1">React, Next.js, TypeScript, TailwindCSS, Node.js, Python, GraphQL.</p></div></div><button class="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-400" onclick="openRealApp(\'contact\')">View Contact & Socials</button></div>'],
+      launchpad: ['Launchpad', '<div class="grid grid-cols-4 gap-4 text-center text-xs"><button class="p-4 rounded-xl bg-white/10 hover:bg-white/20" onclick="openFinderWindow()"><i class="fa-solid fa-folder-open text-2xl mb-2"></i><br>Finder</button><button class="p-4 rounded-xl bg-white/10 hover:bg-white/20" onclick="toggleApp(\'terminalWindow\')"><i class="fa-solid fa-terminal text-2xl mb-2"></i><br>Terminal</button><button class="p-4 rounded-xl bg-white/10 hover:bg-white/20" onclick="openRealApp(\'portfolio\')"><i class="fa-solid fa-id-card text-2xl mb-2"></i><br>Portfolio</button><button class="p-4 rounded-xl bg-white/10 hover:bg-white/20" onclick="openRealApp(\'projects\')"><i class="fa-solid fa-diagram-project text-2xl mb-2"></i><br>Projects</button><button class="p-4 rounded-xl bg-white/10 hover:bg-white/20" onclick="openRealApp(\'contact\')"><i class="fa-solid fa-address-book text-2xl mb-2"></i><br>Contact</button><button class="p-4 rounded-xl bg-white/10 hover:bg-white/20" onclick="openRealApp(\'settings\')"><i class="fa-solid fa-gear text-2xl mb-2"></i><br>Settings</button><button class="p-4 rounded-xl bg-white/10 hover:bg-white/20" onclick="openRealApp(\'calendar\')"><i class="fa-solid fa-calendar text-2xl mb-2"></i><br>Calendar</button><button class="p-4 rounded-xl bg-white/10 hover:bg-white/20" onclick="openRealApp(\'notes\')"><i class="fa-solid fa-note-sticky text-2xl mb-2"></i><br>Notes</button></div>'],
+      portfolio: ['Portfolio', '<div class="space-y-5"><div><p class="text-cyan-300 text-xs uppercase tracking-[0.25em]">Pamarthi Avinash</p><h1 class="text-3xl font-semibold mt-2">B.Tech Final Year · AI/ML &amp; Web Development</h1><p class="text-white/65 mt-2 max-w-xl">Final-year engineering student at NRI Institute of Technology, building an AI/ML research project on extreme rainfall prediction and hands-on web experiences like this desktop.</p></div><div class="grid grid-cols-2 gap-3"><div class="p-4 rounded-xl bg-white/10"><h2 class="font-semibold">Currently building</h2><p class="text-white/60 text-sm mt-1">TBEF — a transformer-based ensemble model for sub-seasonal extreme rainfall prediction over India.</p></div><div class="p-4 rounded-xl bg-white/10"><h2 class="font-semibold">Stack</h2><p class="text-white/60 text-sm mt-1">HTML, CSS, JavaScript, Python, PyTorch, and a growing interest in ML research tooling.</p></div></div><div class="flex gap-3"><button class="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-400" onclick="openRealApp(\'projects\')">View Projects</button><button class="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20" onclick="openRealApp(\'contact\')">Contact &amp; Socials</button></div></div>'],
+      projects: ['Projects', '<div class="space-y-4"><h1 class="text-2xl font-semibold mb-1">Selected Projects</h1><div class="p-4 rounded-xl bg-white/10 border border-white/10"><div class="flex items-center justify-between"><h2 class="font-semibold text-cyan-300">TBEF — Rainfall Prediction Research</h2><span class="text-[10px] uppercase tracking-wide px-2 py-0.5 rounded-full bg-amber-400/20 text-amber-300">In progress</span></div><p class="text-white/65 text-sm mt-2">Transformer-Based Ensemble Framework with topographic and atmospheric feature fusion for sub-seasonal prediction of extreme rainfall events over the Indian subcontinent — combining PatchTST, BiLSTM, TCN and XGBoost base learners with a shared fusion module.</p><p class="text-white/40 text-xs mt-2">ERA5 · IMD gridded rainfall · SRTM topography · PyTorch · Google Colab</p></div><div class="p-4 rounded-xl bg-white/10 border border-white/10"><div class="flex items-center justify-between"><h2 class="font-semibold text-purple-300">INNOGENESIS 2026</h2><span class="text-[10px] uppercase tracking-wide px-2 py-0.5 rounded-full bg-emerald-400/20 text-emerald-300">Organizing &amp; building</span></div><p class="text-white/65 text-sm mt-2">Hackathon event at NRI Institute of Technology — designed and built the single-page event website end-to-end (theme, registration flow, contact form, organizing committee section) alongside helping organize the event itself.</p><p class="text-white/40 text-xs mt-2">HTML · CSS · JavaScript</p></div><div class="p-4 rounded-xl bg-white/10 border border-white/10"><div class="flex items-center justify-between"><h2 class="font-semibold text-emerald-300">This Desktop</h2><span class="text-[10px] uppercase tracking-wide px-2 py-0.5 rounded-full bg-sky-400/20 text-sky-300">Live</span></div><p class="text-white/65 text-sm mt-2">A macOS Sonoma-inspired interactive portfolio — boot sequence, lock screen, draggable windows, a working terminal, Finder, and this very app system — built from scratch and tuned to run smoothly even on older hardware.</p><p class="text-white/40 text-xs mt-2">HTML · CSS · JavaScript · Tailwind</p></div></div>'],
       contact: ['Contact & Socials', '<div class="space-y-4"><h1 class="text-2xl font-semibold">Let’s build something useful.</h1><a class="flex items-center gap-3 p-3 rounded-lg bg-white/10 hover:bg-white/20" href="mailto:avinashcreates@gmail.com"><i class="fa-solid fa-envelope text-red-300 w-5"></i><span>Email: avinashcreates@gmail.com</span></a><div class="grid grid-cols-2 gap-3"><a class="p-4 rounded-xl bg-white/10 hover:bg-white/20" href="https://github.com/avinashcreates" target="_blank" rel="noreferrer"><i class="fa-brands fa-github text-2xl"></i><span class="block mt-2 text-sm">GitHub</span></a><a class="p-4 rounded-xl bg-white/10 hover:bg-white/20" href="https://www.linkedin.com/in/avinashpamarthi" target="_blank" rel="noreferrer"><i class="fa-brands fa-linkedin text-2xl text-sky-300"></i><span class="block mt-2 text-sm">LinkedIn</span></a><a class="p-4 rounded-xl bg-white/10 hover:bg-white/20" href="https://www.instagram.com/avinashcreates" target="_blank" rel="noreferrer"><i class="fa-brands fa-instagram text-2xl text-pink-300"></i><span class="block mt-2 text-sm">Instagram</span></a><a class="p-4 rounded-xl bg-white/10 hover:bg-white/20" href="https://leetcode.com/avinashcreates" target="_blank" rel="noreferrer"><i class="fa-solid fa-code text-2xl text-amber-300"></i><span class="block mt-2 text-sm">LeetCode</span></a></div></div>'],
       calendar: ['Calendar', '<div class="flex flex-col h-full"><div class="flex items-center justify-between mb-4"><button class="px-3 py-1 rounded bg-white/10 hover:bg-white/20" onclick="changeCalendarMonth(-1)"><i class="fa-solid fa-chevron-left"></i></button><h2 class="text-lg" id="calendarMonthTitle"></h2><button class="px-3 py-1 rounded bg-white/10 hover:bg-white/20" onclick="changeCalendarMonth(1)"><i class="fa-solid fa-chevron-right"></i></button></div><div class="grid grid-cols-7 gap-1 text-center text-xs text-white/50 mb-1"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div><div class="grid grid-cols-7 gap-1 flex-1" id="calendarGrid"></div><button class="mt-4 self-end px-3 py-1.5 rounded bg-blue-500 hover:bg-blue-400 text-sm" onclick="addCalendarEvent()"><i class="fa-solid fa-plus mr-1"></i>Add Event</button></div>'],
       music: ['Music', '<div class="text-center"><i class="fa-solid fa-music text-6xl text-pink-400"></i><h2 class="text-xl mt-4">Browser Music Player</h2><p class="text-white/60 text-sm mt-2">Choose a local audio file to play it here.</p><input class="mt-5 text-xs" type="file" accept="audio/*" onchange="playLocalAudio(this)"><audio class="w-full mt-5" id="localAudio" controls></audio></div>'],
-      settings: ['System Settings', '<div class="space-y-4"><section class="p-4 rounded-xl bg-white/10 border border-white/10"><div class="flex items-center gap-4"><img class="w-16 h-16 rounded-full object-cover border-2 border-white/30 shadow-lg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcwQS5EYygENpT9C3PAh1jSR4JBY5JMwpun6c7qmz2v2rXVo-iqSioh2qpqtP8B3qWre7UN8t-YD33-tbYL09SqetPcEwwV25ENn7xZHYDu0Z3R538Krca4WCHUH_kmcqXl7As535KkdsxUz53Hi7oOvq24nL8bleCqCsWOwbWEYNICzYgldbDIblt14WRlAWd0Fgg7aT8CbsGPNFCbNhqRJvsPjdFG2sn3Eztv6hxyTFiNhrtOV3K" alt="Pamarthi Avinash profile photo"><div><h2 class="text-xl font-semibold">Pamarthi Avinash</h2><p class="text-cyan-300 text-sm">Fullstack Engineer · AI Enthusiast</p><p class="text-white/55 text-xs mt-1">Vijayawada, India</p></div></div><div class="grid grid-cols-2 gap-2 mt-4 text-xs"><div class="p-2 rounded-lg bg-black/15"><span class="text-white/45 block">Email</span><span>avinashcreates@gmail.com</span></div><div class="p-2 rounded-lg bg-black/15"><span class="text-white/45 block">Focus</span><span>Web & AI products</span></div></div></section><div class="grid grid-cols-2 gap-3"><button class="p-3 rounded-lg bg-white/10 hover:bg-white/20 text-left" onclick="openRealApp(\'portfolio\')"><i class="fa-solid fa-id-card mr-2 text-cyan-300"></i>Portfolio</button><button class="p-3 rounded-lg bg-white/10 hover:bg-white/20 text-left" onclick="openRealApp(\'contact\')"><i class="fa-solid fa-address-book mr-2 text-pink-300"></i>Contact</button></div><div class="grid grid-cols-2 gap-3"><button class="p-3 rounded-lg bg-white/10 hover:bg-white/20 text-left" onclick="toggleWallpaperHue()"><i class="fa-solid fa-palette mr-2"></i>Change wallpaper</button><button class="p-3 rounded-lg bg-white/10 hover:bg-white/20 text-left" onclick="requestNotifications()"><i class="fa-solid fa-bell mr-2"></i>Notifications</button></div><div class="p-3 rounded-lg bg-white/10 text-sm text-white/70"><i class="fa-solid fa-circle-check text-emerald-300 mr-2"></i>Profile and desktop settings are saved in this browser.</div></div>'],
-      trash: ['Trash', '<div class="text-center text-white/70"><i class="fa-solid fa-trash-can text-5xl mb-4"></i><p id="trashStatus">Trash is empty.</p><button class="mt-5 px-4 py-2 rounded-lg bg-red-500/70 hover:bg-red-500" onclick="clearBrowserTrash()">Empty Trash</button></div>']
+      settings: ['System Settings', '<div class="space-y-4"><section class="p-4 rounded-xl bg-white/10 border border-white/10"><div class="flex items-center gap-4"><img class="w-16 h-16 rounded-full object-cover border-2 border-white/30 shadow-lg" src="img.png" alt="Pamarthi Avinash profile photo"><div><h2 class="text-xl font-semibold">Pamarthi Avinash</h2><p class="text-cyan-300 text-sm">B.Tech Final Year · AI/ML &amp; Web Development</p><p class="text-white/55 text-xs mt-1">Andhra Pradesh, India</p></div></div><div class="grid grid-cols-2 gap-2 mt-4 text-xs"><div class="p-2 rounded-lg bg-black/15"><span class="text-white/45 block">Email</span><span>avinashcreates@gmail.com</span></div><div class="p-2 rounded-lg bg-black/15"><span class="text-white/45 block">Focus</span><span>AI/ML research &amp; web products</span></div></div></section><div class="grid grid-cols-2 gap-3"><button class="p-3 rounded-lg bg-white/10 hover:bg-white/20 text-left" onclick="openRealApp(\'portfolio\')"><i class="fa-solid fa-id-card mr-2 text-cyan-300"></i>Portfolio</button><button class="p-3 rounded-lg bg-white/10 hover:bg-white/20 text-left" onclick="openRealApp(\'contact\')"><i class="fa-solid fa-address-book mr-2 text-pink-300"></i>Contact</button></div><div class="grid grid-cols-2 gap-3"><button class="p-3 rounded-lg bg-white/10 hover:bg-white/20 text-left" onclick="toggleWallpaperHue()"><i class="fa-solid fa-palette mr-2"></i>Change wallpaper</button><button class="p-3 rounded-lg bg-white/10 hover:bg-white/20 text-left" onclick="requestNotifications()"><i class="fa-solid fa-bell mr-2"></i>Notifications</button></div><div class="p-3 rounded-lg bg-white/10 text-sm text-white/70"><i class="fa-solid fa-circle-check text-emerald-300 mr-2"></i>Profile and desktop settings are saved in this browser.</div></div>'],
+      trash: ['Trash', '<div class="text-center text-white/70"><i class="fa-solid fa-trash-can text-5xl mb-4"></i><p id="trashStatus">Trash is empty.</p><button class="mt-5 px-4 py-2 rounded-lg bg-red-500/70 hover:bg-red-500" onclick="clearBrowserTrash()">Empty Trash</button></div>'],
+      notes: ['Notes', '<div class="flex flex-col h-full gap-3"><div class="flex items-center justify-between"><h2 class="text-lg font-semibold"><i class="fa-solid fa-note-sticky text-amber-300 mr-2"></i>Quick Note</h2><span class="text-[10px] text-white/40" id="noteSaveStatus">Saved</span></div><textarea id="noteArea" class="flex-1 w-full bg-yellow-50/95 text-slate-800 rounded-lg p-4 text-sm leading-relaxed resize-none outline-none shadow-inner" placeholder="Jot something down — it saves automatically in this browser." oninput="saveNote()"></textarea></div>'],
+      photos: ['Photos', '<div class="space-y-4"><h2 class="text-lg font-semibold"><i class="fa-solid fa-image text-sky-300 mr-2"></i>Photo Library</h2><div class="grid grid-cols-3 gap-3"><button class="aspect-square rounded-lg overflow-hidden border border-white/10 hover:opacity-80 transition" onclick="openPhotoLightbox(\'img.png\')"><img src="img.png" alt="Pamarthi Avinash" class="w-full h-full object-cover"></button></div><p class="text-white/40 text-xs">Click a photo to view it full size.</p></div>'],
+      mail: ['Mail', '<div class="space-y-4"><h2 class="text-lg font-semibold"><i class="fa-solid fa-envelope text-red-300 mr-2"></i>New Message</h2><div class="space-y-2"><input id="mailTo" class="w-full bg-black/25 border border-white/15 rounded px-3 py-2 text-sm" value="avinashcreates@gmail.com" readonly><input id="mailSubject" class="w-full bg-black/25 border border-white/15 rounded px-3 py-2 text-sm" placeholder="Subject" value="Hello from your portfolio!"><textarea id="mailBody" class="w-full h-40 bg-black/25 border border-white/15 rounded px-3 py-2 text-sm resize-none" placeholder="Write your message..."></textarea></div><button class="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-400" onclick="sendMailCompose()"><i class="fa-solid fa-paper-plane mr-2"></i>Send</button></div>'],
+      messages: ['Messages', '<div class="flex flex-col h-full"><div class="flex-1 space-y-2 overflow-y-auto mb-3" id="messagesThread"><div class="max-w-[75%] bg-white/10 rounded-2xl rounded-bl-sm px-3 py-2 text-sm">Hey! 👋 I\'m Avinash. Leave a message and I\'ll reply by email.</div></div><form class="flex gap-2" onsubmit="sendQuickMessage(event)"><input id="messageInput" class="flex-1 bg-black/25 border border-white/15 rounded-full px-4 py-2 text-sm outline-none" placeholder="iMessage"><button class="w-9 h-9 rounded-full bg-blue-500 hover:bg-blue-400 flex items-center justify-center" type="submit"><i class="fa-solid fa-arrow-up text-xs"></i></button></form></div>'],
+      facetime: ['FaceTime', '<div class="text-center space-y-4"><i class="fa-solid fa-video text-6xl text-green-400"></i><h2 class="text-xl">Schedule a Call</h2><p class="text-white/60 text-sm max-w-sm mx-auto">FaceTime isn\'t available in the browser, but I\'m happy to set up a real call — email me a time that works for you.</p><button class="px-4 py-2 rounded-lg bg-green-500 hover:bg-green-400" onclick="requestFaceTime()"><i class="fa-solid fa-calendar-check mr-2"></i>Request a Call</button></div>']
     };
     const systemAppTabOrder = [];
     let activeSystemAppTab = '';
@@ -488,6 +494,7 @@
       renderSystemAppTabs();
       if (app === 'calendar') renderCalendar();
       if (app === 'trash') updateTrashStatus();
+      if (app === 'notes') loadNote();
     }
 
     function ensureProfilePhotoControl(content) {
@@ -627,6 +634,71 @@
 
     function requestNotifications() {
       if ('Notification' in window) Notification.requestPermission();
+    }
+
+    // =========================================================================
+    // NOTES, PHOTOS, MAIL, MESSAGES & FACETIME (lightweight real functionality)
+    // =========================================================================
+    function saveNote() {
+      const area = document.getElementById('noteArea');
+      const status = document.getElementById('noteSaveStatus');
+      if (!area) return;
+      localStorage.setItem('appleWebNote', area.value);
+      if (status) {
+        status.textContent = 'Saving…';
+        clearTimeout(saveNote._t);
+        saveNote._t = setTimeout(() => { status.textContent = 'Saved'; }, 400);
+      }
+    }
+
+    function loadNote() {
+      const area = document.getElementById('noteArea');
+      if (area) area.value = localStorage.getItem('appleWebNote') || '';
+    }
+
+    function openPhotoLightbox(src) {
+      let box = document.getElementById('photoLightbox');
+      if (!box) {
+        box = document.createElement('div');
+        box.id = 'photoLightbox';
+        box.className = 'fixed inset-0 z-[999] bg-black/85 flex items-center justify-center cursor-zoom-out';
+        box.onclick = () => box.remove();
+        box.innerHTML = `<img src="${src}" class="max-w-[85vw] max-h-[85vh] rounded-xl shadow-2xl" alt="Full size photo">`;
+        document.body.appendChild(box);
+      }
+    }
+
+    function sendMailCompose() {
+      const to = document.getElementById('mailTo')?.value.trim() || 'avinashcreates@gmail.com';
+      const subject = document.getElementById('mailSubject')?.value.trim() || '';
+      const body = document.getElementById('mailBody')?.value.trim() || '';
+      window.location.href = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    }
+
+    function sendQuickMessage(event) {
+      event.preventDefault();
+      const input = document.getElementById('messageInput');
+      const thread = document.getElementById('messagesThread');
+      const text = input.value.trim();
+      if (!text || !thread) return;
+      const bubble = document.createElement('div');
+      bubble.className = 'max-w-[75%] ml-auto bg-blue-500 rounded-2xl rounded-br-sm px-3 py-2 text-sm text-white';
+      bubble.textContent = text;
+      thread.appendChild(bubble);
+      input.value = '';
+      thread.scrollTop = thread.scrollHeight;
+      setTimeout(() => {
+        const reply = document.createElement('div');
+        reply.className = 'max-w-[75%] bg-white/10 rounded-2xl rounded-bl-sm px-3 py-2 text-sm';
+        reply.innerHTML = `Thanks for the message! Opening email so it reaches me for real →`;
+        thread.appendChild(reply);
+        thread.scrollTop = thread.scrollHeight;
+        window.location.href = `mailto:avinashcreates@gmail.com?subject=${encodeURIComponent('Message from your portfolio')}&body=${encodeURIComponent(text)}`;
+      }, 500);
+    }
+
+    function requestFaceTime() {
+      window.location.href = `mailto:avinashcreates@gmail.com?subject=${encodeURIComponent("Let's schedule a call")}&body=${encodeURIComponent('Hi Avinash, I would like to schedule a call. Here are a few times that work for me:\n')}`;
     }
 
     function updateTrashStatus() {
@@ -1205,16 +1277,16 @@
       • <span class="text-purple-400">socials</span>     Show social links
       • <span class="text-green-400">portfolio</span>   Open portfolio window
       • <span class="text-white">exit</span>        Minimize Terminal`,
-      description: `Pamarthi Avinash is a Fullstack Engineer and AI Enthusiast building responsive, thoughtful interfaces and practical products.`,
+      description: `Pamarthi Avinash is a final-year B.Tech student at NRI Institute of Technology, building an AI/ML research project on extreme rainfall prediction and hands-on web experiences like this desktop.`,
       aboutme: `Pamarthi Avinash
-    Fullstack Engineer · AI Enthusiast · Innovator
-    Building next-generation interfaces with React, TypeScript, Node.js and Python.`,
+    B.Tech Final Year · NRI Institute of Technology (NRIIT)
+    Building TBEF — an AI/ML research project on extreme rainfall prediction — and web experiences like this one.`,
       whoami: `Pamarthi Avinash (@avinashcreates)
-    Fullstack Engineer · AI Enthusiast · Innovator
-    Location: Vijayawada, IN · Building responsive next-gen interfaces`,
-      skills: `Frontend : React, Next.js, TypeScript, TailwindCSS, Three.js
-Backend  : Node.js, Python, GraphQL, Express, Django
-DevOps   : Docker, AWS, GitHub Actions, Vercel`,
+    B.Tech Final Year · AI/ML & Web Development
+    Location: Andhra Pradesh, IN · NRI Institute of Technology`,
+      skills: `Web      : HTML5, CSS3, JavaScript, TailwindCSS
+AI / ML  : Python, PyTorch, Transformers, XGBoost
+Tools    : Git, Google Colab, Kaggle`,
       fontcolor: () => {
         const colors = ['#38bdf8', '#f9a8d4', '#86efac', '#fde68a', '#c4b5fd'];
         const next = colors[Math.floor(Math.random() * colors.length)];
@@ -1231,9 +1303,10 @@ DevOps   : Docker, AWS, GitHub Actions, Vercel`,
         return 'Opening avinashcreates@gmail.com';
       },
       projects: `Selected projects:
-• Apple Web OS portfolio desktop
-• Responsive fullstack interfaces
-• AI-powered product experiments`,
+• TBEF — Transformer-based ensemble model for extreme rainfall prediction over India (in progress)
+• INNOGENESIS 2026 — Built the hackathon's event website end-to-end at NRIIT
+• This macOS-inspired interactive portfolio desktop
+Type 'portfolio' to open the Projects app for details.`,
       socials: `GitHub: https://github.com/avinashcreates
 LinkedIn: https://www.linkedin.com/in/avinashpamarthi
 Instagram: https://www.instagram.com/avinashcreates
