@@ -46,27 +46,20 @@
 <!-- ========================================================================
      AUTHENTIC macOS SONOMA LOCK & LOGIN SCREEN
      ======================================================================== -->
-<div class="lockscreen-overlay" id="lockScreen" onclick="focusLockInput()">
+<div class="lockscreen-overlay" id="lockScreen">
 <!-- Top Lock Screen Clock -->
 <div class="flex flex-col items-center mt-6">
 <div class="lock-time" id="lockClock">9:41</div>
 <div class="lock-date" id="lockDate">Tuesday, September 12</div>
 </div>
-<!-- Center User Login Avatar & Password Box -->
-<div class="flex flex-col items-center mb-8" onclick="event.stopPropagation()">
-<div class="lock-avatar-ring mb-3.5 relative group cursor-pointer" onclick="shakeLockScreen()">
-<img alt="User Avatar" data-profile-photo="true" class="w-full h-full rounded-full object-cover shadow-inner" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcwQS5EYygENpT9C3PAh1jSR4JBY5JMwpun6c7qmz2v2rXVo-iqSioh2qpqtP8B3qWre7UN8t-YD33-tbYL09SqetPcEwwV25ENn7xZHYDu0Z3R538Krca4WCHUH_kmcqXl7As535KkdsxUz53Hi7oOvq24nL8bleCqCsWOwbWEYNICzYgldbDIblt14WRlAWd0Fgg7aT8CbsGPNFCbNhqRJvsPjdFG2sn3Eztv6hxyTFiNhrtOV3K"/>
+<!-- Center User Login Avatar -->
+<div class="flex flex-col items-center mb-8" onclick="event.stopPropagation(); attemptUnlock()">
+<div class="lock-avatar-ring mb-3.5 relative group cursor-pointer">
+<img alt="User Avatar" data-profile-photo="true" class="w-full h-full rounded-full object-cover shadow-inner" src="img.png"/>
 <div class="absolute inset-0 rounded-full bg-black/10 group-hover:bg-transparent transition"></div>
 </div>
 <h1 class="text-white font-medium text-lg tracking-tight mb-3 drop-shadow-md">Pamarthi Avinash</h1>
-<!-- Password input pill -->
-<div class="lock-input-box relative flex items-center rounded-full px-3 py-1.5 w-56 transition-all duration-200" id="lockInputContainer">
-<input autocomplete="off" class="bg-transparent text-white text-xs font-medium placeholder-white/50 border-none outline-none focus:ring-0 w-full pl-1 caret-white" id="lockPasswordInput" onkeydown="handleLockInputKey(event)" placeholder="Enter Password" type="password"/>
-<button aria-label="Unlock macOS" class="w-6 h-6 rounded-full bg-white/30 hover:bg-white/50 active:scale-95 flex items-center justify-center text-white transition ml-1" id="unlockButton" onclick="attemptUnlock()">
-<i class="fa-solid fa-arrow-right text-[10px]"></i>
-</button>
-</div>
-<p class="text-white/40 text-[11px] mt-2 font-normal">Press Return or click arrow to log in</p>
+<p class="text-white/40 text-[11px] mt-1 font-normal">Click your profile to continue</p>
 </div>
 <!-- Bottom Quick Actions: Sleep, Restart, Shut Down -->
 <div class="flex items-center gap-10 pb-4 text-white/70 text-xs">

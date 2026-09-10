@@ -111,8 +111,7 @@
     updateLockScreenTime();
 
     function focusLockInput() {
-      const inp = document.getElementById('lockPasswordInput');
-      if (inp) inp.focus();
+      return;
     }
 
     function handleLockInputKey(e) {
@@ -131,13 +130,6 @@
 
     function attemptUnlock() {
       const lockOverlay = document.getElementById('lockScreen');
-      const input = document.getElementById('lockPasswordInput');
-
-      if (!input || input.value !== 'avi') {
-        shakeLockScreen();
-        if (input) input.value = '';
-        return;
-      }
 
       // Authentic unlock animation: smooth zoom & dissolve into desktop
       if (lockOverlay) {
@@ -163,11 +155,6 @@
       lockOverlay.style.display = 'flex';
       void lockOverlay.offsetWidth;
       lockOverlay.classList.remove('unlocked');
-      const input = document.getElementById('lockPasswordInput');
-      if (input) {
-        input.value = '';
-        setTimeout(() => input.focus(), 80);
-      }
     }
 
     function sleepMac() {
