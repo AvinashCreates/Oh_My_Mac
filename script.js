@@ -193,7 +193,14 @@
     // Kick off boot on load
     window.addEventListener('DOMContentLoaded', () => {
       startBootSequence();
+      updateDesktopClock();
+      setInterval(updateDesktopClock, 1000);
     });
+
+    function updateDesktopClock() {
+      const clock = document.getElementById('widgetClockTime');
+      if (clock) clock.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
 
     // =========================================================================
     // WINDOW LIFECYCLE MANAGEMENT (Open, Genie Minimize, Maximize, Close)
