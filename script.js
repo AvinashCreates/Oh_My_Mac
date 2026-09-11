@@ -218,15 +218,66 @@
       win.classList.add('active-window');
     }
 
+    const FRAME_ANIMATION_TIME = 180;
+    const GENIE_ANIMATION_TIME = 420;
+
+    function applyZoomState(id) {
+      const win = document.getElementById(id);
+      if (!win) return;
+      win.classList.remove('zooming-state');
+      void win.offsetWidth;
+      win.classList.add('zooming-state');
+      setTimeout(() => win.classList.remove('zooming-state'), 260);
+    }
+
+    function applyScaleEffect(id) {
+      const win = document.getElementById(id);
+      if (!win) return;
+      win.classList.remove('scale-effect');
+      void win.offsetWidth;
+      win.classList.add('scale-effect');
+      setTimeout(() => win.classList.remove('scale-effect'), 220);
+    }
+
+    function applySuckEffect(id) {
+      const win = document.getElementById(id);
+      if (!win) return;
+      win.classList.remove('win-suck');
+      void win.offsetWidth;
+      win.classList.add('win-suck');
+      setTimeout(() => win.classList.remove('win-suck'), 260);
+    }
+
+    function applyFullscreenTransition(id) {
+      const win = document.getElementById(id);
+      if (!win) return;
+      win.classList.remove('appkit-fullscreen');
+      void win.offsetWidth;
+      win.classList.add('appkit-fullscreen');
+      setTimeout(() => win.classList.remove('appkit-fullscreen'), 340);
+    }
+
+    function liveResizeWindow(id, nextTop, nextLeft, nextWidth, nextHeight) {
+      const win = document.getElementById(id);
+      if (!win) return;
+      win.classList.add('live-resizing', 'frame-anim');
+      win.style.top = nextTop;
+      win.style.left = nextLeft;
+      win.style.width = nextWidth;
+      win.style.height = nextHeight;
+      setTimeout(() => {
+        win.classList.remove('live-resizing', 'frame-anim');
+      }, FRAME_ANIMATION_TIME);
+    }
+
     function closeWindow(id) {
       const win = document.getElementById(id);
       if (!win) return;
-      // Satisfying macOS close animation
+      applySuckEffect(id);
       win.classList.add('win-closing');
       setTimeout(() => {
         win.classList.add('hidden');
         win.classList.remove('win-closing');
-        // If Finder was closed, hide dock dot
         if (id === 'finderExplorerWindow') {
           const dot = document.getElementById('finderDockDot');
           if (dot) dot.style.opacity = '0.3';
@@ -243,39 +294,49 @@
       return el ? el.getBoundingClientRect() : null;
     }
 
+    function setGenieOrigin(id) {
+      const win = document.getElementById(id);
+      const dockRect = getDockIconRect(id);
+      if (!win || !dockRect) return;
+      const winRect = win.getBoundingClientRect();
+      const dx = (dockRect.left + dockRect.width / 2) - (winRect.left + winRect.width / 2);
+      const dy = (dockRect.top + dockRect.height / 2) - (winRect.top + winRect.height / 2);
+      win.style.setProperty('--genie-x', dx + 'px');
+      win.style.setProperty('--genie-y', dy + 'px');
+    }
+
     function minimizeWindow(id) {
       const win = document.getElementById(id);
       if (!win) return;
+      if (win.dataset.genieState === 'minimizing' || win.dataset.minimized === 'true') return;
 
-      // Real macOS-style genie: shrink toward the actual dock icon position
-      const winRect = win.getBoundingClientRect();
-      const dockRect = getDockIconRect(id);
-      if (dockRect) {
-        const dx = (dockRect.left + dockRect.width / 2) - (winRect.left + winRect.width / 2);
-        const dy = (dockRect.top + dockRect.height / 2) - (winRect.top + winRect.height / 2);
-        win.style.setProperty('--genie-x', dx + 'px');
-        win.style.setProperty('--genie-y', dy + 'px');
-      }
+      setGenieOrigin(id);
+      win.dataset.genieState = 'minimizing';
       win.classList.add('win-minimizing');
       setTimeout(() => {
         win.classList.add('hidden');
         win.classList.remove('win-minimizing');
         win.dataset.minimized = "true";
-      }, 220);
+        delete win.dataset.genieState;
+      }, GENIE_ANIMATION_TIME);
     }
 
     function unminimizeWindow(id) {
       const win = document.getElementById(id);
       if (!win) return;
+      if (win.dataset.genieState === 'restoring') return;
 
       win.classList.remove('hidden');
+      setGenieOrigin(id);
+      win.dataset.genieState = 'restoring';
       win.classList.add('win-unminimizing');
       delete win.dataset.minimized;
       bringToFront(id);
 
       setTimeout(() => {
         win.classList.remove('win-unminimizing');
-      }, 220);
+        delete win.dataset.genieState;
+      }, GENIE_ANIMATION_TIME);
     }
 
     function handleDockClick(appType, windowId, event) {
@@ -304,12 +365,15 @@
       if (!win) return;
 
       win.classList.remove('hidden');
-      win.classList.add('win-opening');
+      setGenieOrigin(id);
+      win.dataset.genieState = 'restoring';
+      win.classList.add('win-unminimizing');
       bringToFront(id);
 
       setTimeout(() => {
-        win.classList.remove('win-opening');
-      }, 160);
+        win.classList.remove('win-unminimizing');
+        delete win.dataset.genieState;
+      }, GENIE_ANIMATION_TIME);
 
       if (id === 'finderExplorerWindow') {
         const dot = document.getElementById('finderDockDot');
@@ -323,13 +387,14 @@
       const win = document.getElementById(id);
       if (!win) return;
       bringToFront(id);
+      applyZoomState(id);
 
       if (id === 'systemAppWindow' && !document.fullscreenElement && win.requestFullscreen) {
+        applyFullscreenTransition(id);
         win.requestFullscreen().catch(() => {});
       }
 
       if (!windowMaxStates[id]) {
-        // Save initial geometry
         windowMaxStates[id] = {
           top: win.style.top || '12%',
           left: win.style.left || '15%',
@@ -337,17 +402,14 @@
           height: win.style.height || (id === 'terminalWindow' ? '440px' : '480px'),
           borderRadius: win.style.borderRadius || '12px'
         };
-        win.style.top = '28px';
-        win.style.left = '0';
-        win.style.width = '100vw';
-        win.style.height = 'calc(100vh - 86px)';
+        liveResizeWindow(id, '28px', '0', '100vw', 'calc(100vh - 86px)');
         win.style.borderRadius = '0px';
       } else {
         const st = windowMaxStates[id];
-        win.style.top = st.top;
-        win.style.left = st.left;
-        win.style.width = st.width;
-        win.style.height = st.height;
+        if (id === 'systemAppWindow' && document.fullscreenElement && document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+        }
+        liveResizeWindow(id, st.top, st.left, st.width, st.height);
         win.style.borderRadius = st.borderRadius;
         delete windowMaxStates[id];
       }
@@ -482,6 +544,17 @@
       tabs.innerHTML = systemAppTabOrder.map(app => `<button class="px-2 py-1 rounded text-[10px] ${app === activeSystemAppTab ? 'bg-white/20 text-white' : 'text-white/50 hover:text-white'}" onclick="openRealApp('${app}')">${app[0].toUpperCase() + app.slice(1)}</button>`).join('');
     }
 
+    function requestMapLocation() {
+      if (!navigator.geolocation) {
+        notify('Maps', 'Location is not available in this browser.', 'fa-map-location-dot');
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(
+        ({ coords }) => window.open(`https://www.google.com/maps/@${coords.latitude},${coords.longitude},15z`, '_blank', 'noopener,noreferrer'),
+        () => notify('Maps', 'Location permission was not granted.', 'fa-map-location-dot')
+      );
+    }
+
     function openRealApp(app, dockItem) {
       if (dockItem) bounceDockItem(dockItem);
       if (app === 'safari') {
@@ -489,12 +562,15 @@
         return;
       }
       if (app === 'maps') {
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(position => {
-            const { latitude, longitude } = position.coords;
-            window.open(`https://www.google.com/maps/@${latitude},${longitude},15z`, '_blank', 'noopener,noreferrer');
-          }, () => window.open('https://www.google.com/maps', '_blank', 'noopener,noreferrer'));
-        } else window.open('https://www.google.com/maps', '_blank', 'noopener,noreferrer');
+        if (!systemAppTabOrder.includes(app)) systemAppTabOrder.push(app);
+        activeSystemAppTab = app;
+        renderSystemAppTabs();
+        const title = document.getElementById('systemAppTitle');
+        const content = document.getElementById('systemAppContent');
+        if (title) title.textContent = 'Maps';
+        if (content) content.innerHTML = '<div class="flex flex-col items-center justify-center h-full text-center gap-4"><i class="fa-solid fa-map-location-dot text-6xl text-emerald-300"></i><h2 class="text-2xl font-semibold">Maps</h2><p class="text-white/60 max-w-md">Open a map in a new browser tab or use your current location.</p><div class="flex gap-2"><button class="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-400" onclick="window.open(\'https://www.google.com/maps\', \'_blank\', \'noopener,noreferrer\')">Open Google Maps</button><button class="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20" onclick="requestMapLocation()">Use My Location</button></div></div>';
+        openAppWithLifecycle('systemAppWindow');
+        renderSystemAppTabs();
         return;
       }
       const template = appWindowTemplates[app];
@@ -1346,10 +1422,13 @@
         const startX = e.clientX, startY = e.clientY;
         const startW = win.offsetWidth, startH = win.offsetHeight;
         function onMove(ev) {
+          win.classList.add('live-resizing', 'frame-anim');
           win.style.width = Math.max(340, startW + (ev.clientX - startX)) + 'px';
           win.style.height = Math.max(220, startH + (ev.clientY - startY)) + 'px';
         }
         function onUp() {
+          win.classList.remove('live-resizing');
+          window.setTimeout(() => win.classList.remove('frame-anim'), FRAME_ANIMATION_TIME);
           document.removeEventListener('mousemove', onMove);
           document.removeEventListener('mouseup', onUp);
         }

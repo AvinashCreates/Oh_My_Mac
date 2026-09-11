@@ -489,6 +489,31 @@
       animation: winOpenScale 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
+    .zooming-state {
+      animation: zoomState 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .scale-effect {
+      animation: scaleEffect 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .win-suck {
+      animation: suckEffect 0.26s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    .appkit-fullscreen {
+      animation: appkitFullscreen 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .live-resizing {
+      transition: width 0.08s linear, height 0.08s linear, left 0.08s linear, top 0.08s linear, border-radius 0.08s ease;
+      cursor: nwse-resize;
+    }
+
+    .frame-anim {
+      animation: frameResize 0.18s ease-out;
+    }
+
     @keyframes winOpenScale {
       0% {
         opacity: 0;
@@ -498,6 +523,35 @@
         opacity: 1;
         transform: scale(1) translateY(0);
       }
+    }
+
+    @keyframes zoomState {
+      0% { transform: scale(0.96); }
+      45% { transform: scale(1.04); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes scaleEffect {
+      0% { opacity: 0.55; transform: scale(0.84); }
+      70% { opacity: 1; transform: scale(1.025); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes suckEffect {
+      0% { opacity: 1; transform: scale(1) translateY(0); }
+      45% { opacity: 1; transform: scale(0.9) translateY(6px); }
+      100% { opacity: 0; transform: scale(0.08) translateY(30px); }
+    }
+
+    @keyframes appkitFullscreen {
+      0% { clip-path: inset(0 round 12px); filter: brightness(0.95) saturate(0.88); }
+      100% { clip-path: inset(0 round 0px); filter: brightness(1) saturate(1); }
+    }
+
+    @keyframes frameResize {
+      0% { box-shadow: 0 12px 32px -8px rgba(0,0,0,0.38); }
+      50% { box-shadow: 0 30px 60px -8px rgba(0,0,0,0.62); }
+      100% { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.55); }
     }
 
     .win-closing {
@@ -522,23 +576,79 @@
     }
     .win-minimizing {
       pointer-events: none;
-      transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease !important;
-      transform: translate(var(--genie-x), var(--genie-y)) scale(0.06) !important;
-      opacity: 0 !important;
+      animation: genieMinimize 0.42s cubic-bezier(0.32, 0, 0.67, 0) forwards !important;
+      transform-origin: center bottom;
+      will-change: transform, clip-path, opacity;
+      contain: paint;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      box-shadow: none !important;
+      transition: none !important;
     }
 
     .win-unminimizing {
-      animation: winUnminimize 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation: genieRestore 0.42s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      will-change: transform, clip-path, opacity;
+      contain: paint;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      box-shadow: none !important;
+      transition: none !important;
     }
 
-    @keyframes winUnminimize {
+    .win-opening {
+      animation: genieRestore 0.42s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      will-change: transform, clip-path, opacity;
+      contain: paint;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      box-shadow: none !important;
+      transition: none !important;
+    }
+
+    @keyframes genieMinimize {
+      0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1, 1) skewX(0deg);
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+      }
+      42% {
+        opacity: 1;
+        transform: translate(calc(var(--genie-x) * 0.36), calc(var(--genie-y) * 0.32)) scale(0.72, 0.78) skewX(-7deg);
+        clip-path: polygon(0 0, 100% 0, 82% 100%, 18% 100%);
+      }
+      78% {
+        opacity: 0.95;
+        transform: translate(calc(var(--genie-x) * 0.82), calc(var(--genie-y) * 0.82)) scale(0.22, 0.32) skewX(4deg);
+        clip-path: polygon(27% 0, 73% 0, 61% 100%, 39% 100%);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(var(--genie-x), var(--genie-y)) scale(0.08, 0.12) skewX(0deg);
+        clip-path: polygon(47% 0, 53% 0, 53% 100%, 47% 100%);
+      }
+    }
+
+    @keyframes genieRestore {
       0% {
         opacity: 0;
-        transform: translate(var(--genie-x), var(--genie-y)) scale(0.06);
+        transform: translate(var(--genie-x), var(--genie-y)) scale(0.08, 0.12) skewX(0deg);
+        clip-path: polygon(47% 0, 53% 0, 53% 100%, 47% 100%);
+      }
+      35% {
+        opacity: 0.95;
+        transform: translate(calc(var(--genie-x) * 0.7), calc(var(--genie-y) * 0.7)) scale(0.3, 0.4) skewX(-4deg);
+        clip-path: polygon(25% 0, 75% 0, 62% 100%, 38% 100%);
+      }
+      70% {
+        opacity: 1;
+        transform: translate(calc(var(--genie-x) * 0.2), calc(var(--genie-y) * 0.2)) scale(0.76, 0.82) skewX(6deg);
+        clip-path: polygon(0 0, 100% 0, 84% 100%, 16% 100%);
       }
       100% {
         opacity: 1;
-        transform: translate(0, 0) scale(1);
+        transform: translate(0, 0) scale(1, 1) skewX(0deg);
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
       }
     }
 
