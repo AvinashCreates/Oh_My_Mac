@@ -81,6 +81,7 @@
       font-size: clamp(4.5rem, 11vw, 9rem);
       letter-spacing: 0.02em;
       background: linear-gradient(135deg, #ffffff 10%, #e0f2fe 50%, #fbcfe8 90%);
+      background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       filter: drop-shadow(0 15px 35px rgba(0,0,0,0.55)) drop-shadow(0 0 45px rgba(255,255,255,0.45));
@@ -969,3 +970,203 @@
     .icon-music { background: linear-gradient(180deg, #fc5b75 0%, #ea2649 100%); }
     .icon-settings { background: linear-gradient(180deg, #8a8d91 0%, #5d6166 100%); }
     .icon-trash { background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(10px); color: #333; }
+
+    /* Tahoe 2026 visual layer. Interaction and window lifecycle rules remain above. */
+    :root {
+      --tahoe-ink: #f8fafc;
+      --tahoe-muted: rgba(226, 232, 240, 0.68);
+      --tahoe-glass: rgba(15, 23, 42, 0.62);
+      --tahoe-border: rgba(255, 255, 255, 0.16);
+      --tahoe-cyan: #67e8f9;
+      --tahoe-violet: #a78bfa;
+    }
+
+    body {
+      background: #030712;
+      color: var(--tahoe-ink);
+    }
+
+    .wallpaper {
+      background:
+        radial-gradient(circle at 18% 12%, rgba(99, 102, 241, 0.34), transparent 36%),
+        radial-gradient(circle at 83% 84%, rgba(236, 72, 153, 0.28), transparent 38%),
+        radial-gradient(circle at 55% 42%, rgba(56, 189, 248, 0.22), transparent 34%),
+        radial-gradient(circle at 50% 50%, #111827 0%, #090d16 54%, #030712 100%);
+      background-size: 130% 130%;
+      animation: tahoeAmbientFlow 28s ease-in-out infinite alternate;
+    }
+
+    .wallpaper-mesh {
+      background:
+        radial-gradient(ellipse at 12% 78%, rgba(129, 140, 248, 0.34), transparent 52%),
+        radial-gradient(ellipse at 88% 20%, rgba(244, 114, 182, 0.24), transparent 48%),
+        radial-gradient(ellipse at 52% 52%, rgba(34, 211, 238, 0.18), transparent 48%);
+      filter: blur(54px) saturate(125%);
+      opacity: 0.8;
+    }
+
+    @keyframes tahoeAmbientFlow {
+      0% { background-position: 0% 12%; }
+      50% { background-position: 70% 82%; }
+      100% { background-position: 100% 18%; }
+    }
+
+    .menubar {
+      height: 30px;
+      background: rgba(15, 23, 42, 0.58);
+      border-bottom-color: var(--tahoe-border);
+      color: rgba(248, 250, 252, 0.92);
+      backdrop-filter: blur(28px) saturate(180%);
+      -webkit-backdrop-filter: blur(28px) saturate(180%);
+    }
+
+    .mac-window {
+      background: rgba(18, 24, 43, 0.86);
+      border-color: var(--tahoe-border);
+      box-shadow: 0 28px 64px -18px rgba(0, 0, 0, 0.78), 0 0 0 1px rgba(255,255,255,0.06);
+      backdrop-filter: blur(36px) saturate(175%);
+      -webkit-backdrop-filter: blur(36px) saturate(175%);
+    }
+
+    .mac-window.active-window {
+      border-color: rgba(103, 232, 249, 0.28);
+      box-shadow: 0 36px 80px -18px rgba(0, 0, 0, 0.86), 0 0 0 1px rgba(103, 232, 249, 0.14);
+    }
+
+    .window-header {
+      height: 42px;
+      background: rgba(255, 255, 255, 0.045);
+      border-bottom-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .terminal-body {
+      background: rgba(5, 10, 20, 0.94);
+      color: #a5f3fc;
+    }
+
+    .dock {
+      background: rgba(24, 32, 54, 0.58);
+      border-color: var(--tahoe-border);
+      box-shadow: 0 22px 44px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.28);
+      backdrop-filter: blur(38px) saturate(190%);
+      -webkit-backdrop-filter: blur(38px) saturate(190%);
+    }
+
+    .dock-icon {
+      box-shadow: 0 9px 18px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255,255,255,0.22);
+    }
+
+    .mac-menu-dropdown,
+    .mac-popover,
+    .spotlight-window {
+      background: rgba(15, 23, 42, 0.88);
+      border-color: var(--tahoe-border);
+      box-shadow: 0 24px 55px rgba(0,0,0,0.62), 0 0 0 1px rgba(255,255,255,0.06);
+    }
+
+    .desktop-folders {
+      position: absolute;
+      top: 54px;
+      right: 28px;
+      z-index: 8;
+      display: grid;
+      grid-template-columns: repeat(2, 88px);
+      gap: 18px 14px;
+      width: 190px;
+    }
+
+    .desktop-folder {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      color: var(--tahoe-ink);
+      width: 88px;
+      min-height: 94px;
+      padding: 7px 5px;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+      text-align: center;
+      transition: background 0.16s ease, transform 0.16s ease;
+    }
+
+    .desktop-folder:hover,
+    .desktop-folder:focus-visible {
+      background: rgba(255, 255, 255, 0.13);
+      outline: none;
+      transform: translateY(-2px);
+    }
+
+    .desktop-folder:active {
+      transform: scale(0.96);
+    }
+
+    .desktop-folder-icon {
+      width: 56px;
+      height: 50px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 14px;
+      background: linear-gradient(145deg, rgba(56, 189, 248, 0.38), rgba(37, 99, 235, 0.22));
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.24), 0 10px 22px rgba(0,0,0,0.24);
+      color: #7dd3fc;
+      font-size: 25px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .desktop-folder-label {
+      max-width: 82px;
+      overflow-wrap: anywhere;
+      color: rgba(248, 250, 252, 0.92);
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 1.15;
+      text-shadow: 0 2px 5px rgba(0,0,0,0.75);
+    }
+
+    .folder-resume .desktop-folder-icon { color: #fb7185; background: linear-gradient(145deg, rgba(244, 63, 94, 0.32), rgba(124, 58, 237, 0.2)); }
+    .folder-research .desktop-folder-icon { color: #c4b5fd; background: linear-gradient(145deg, rgba(139, 92, 246, 0.34), rgba(37, 99, 235, 0.2)); }
+    .folder-notes .desktop-folder-icon { color: #fbbf24; background: linear-gradient(145deg, rgba(245, 158, 11, 0.34), rgba(234, 88, 12, 0.18)); }
+    .folder-contact .desktop-folder-icon { color: #86efac; background: linear-gradient(145deg, rgba(34, 197, 94, 0.3), rgba(14, 165, 233, 0.2)); }
+
+    @media (max-width: 900px) {
+      .desktop-folders {
+        top: 42px;
+        right: 10px;
+        grid-template-columns: repeat(2, 72px);
+        gap: 8px;
+        width: 150px;
+      }
+
+      .desktop-folder {
+        width: 72px;
+        min-height: 78px;
+        padding: 4px;
+      }
+
+      .desktop-folder-icon {
+        width: 44px;
+        height: 40px;
+        font-size: 19px;
+      }
+
+      .desktop-folder-label {
+        max-width: 68px;
+        font-size: 10px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .wallpaper,
+      .wallpaper-mesh,
+      .win-minimizing,
+      .win-unminimizing,
+      .win-opening {
+        animation-duration: 0.01ms !important;
+      }
+    }
