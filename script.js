@@ -541,6 +541,53 @@
       messages: ['Messages', '<div class="flex flex-col h-full"><div class="flex-1 space-y-2 overflow-y-auto mb-3" id="messagesThread"><div class="max-w-[75%] bg-white/10 rounded-2xl rounded-bl-sm px-3 py-2 text-sm">Hey! 👋 I\'m Avinash. Leave a message and I\'ll reply by email.</div></div><form class="flex gap-2" onsubmit="sendQuickMessage(event)"><input id="messageInput" class="flex-1 bg-black/25 border border-white/15 rounded-full px-4 py-2 text-sm outline-none" placeholder="iMessage"><button class="w-9 h-9 rounded-full bg-blue-500 hover:bg-blue-400 flex items-center justify-center" type="submit"><i class="fa-solid fa-arrow-up text-xs"></i></button></form></div>'],
       facetime: ['FaceTime', '<div class="text-center space-y-4"><i class="fa-solid fa-video text-6xl text-green-400"></i><h2 class="text-xl">Schedule a Call</h2><p class="text-white/60 text-sm max-w-sm mx-auto">FaceTime isn\'t available in the browser, but I\'m happy to set up a real call — email me a time that works for you.</p><button class="px-4 py-2 rounded-lg bg-green-500 hover:bg-green-400" onclick="requestFaceTime()"><i class="fa-solid fa-calendar-check mr-2"></i>Request a Call</button></div>']
     };
+    appWindowTemplates.ai = ['Apple Intelligence', `<div class="ai-chat-shell">
+      <div class="ai-chat-intro">
+        <div class="ai-orb"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+        <div><h2>Apple Intelligence</h2><p>Ask about Avinash's work, skills, projects, or contact details.</p></div>
+      </div>
+      <div class="ai-chat-history" id="aiChatHistory">
+        <div class="ai-message ai-message-assistant">Hello. I can tell you about Avinash's portfolio, TBEF rainfall research, web projects, skills, education, or contact links.</div>
+      </div>
+      <form class="ai-chat-form" onsubmit="sendAiMessage(event)">
+        <input id="aiUserInput" autocomplete="off" placeholder="Ask about Avinash..." aria-label="Ask Apple Intelligence" />
+        <button type="submit" aria-label="Send question"><i class="fa-solid fa-arrow-up"></i></button>
+      </form>
+      <div class="ai-suggestions"><button type="button" onclick="askAiSuggestion('What projects has Avinash built?')">Projects</button><button type="button" onclick="askAiSuggestion('What are Avinash skills?')">Skills</button><button type="button" onclick="askAiSuggestion('How can I contact Avinash?')">Contact</button></div>
+    </div>`];
+
+    function askAiSuggestion(question) {
+      const input = document.getElementById('aiUserInput');
+      if (!input) return;
+      input.value = question;
+      sendAiMessage();
+    }
+
+    function sendAiMessage(event) {
+      if (event) event.preventDefault();
+      const input = document.getElementById('aiUserInput');
+      const history = document.getElementById('aiChatHistory');
+      if (!input || !history) return;
+      const question = input.value.trim();
+      if (!question) return;
+      const escapedQuestion = escapeHtml(question);
+      history.insertAdjacentHTML('beforeend', `<div class="ai-message ai-message-user">${escapedQuestion}</div>`);
+      input.value = '';
+      const answer = getAiAnswer(question);
+      history.insertAdjacentHTML('beforeend', `<div class="ai-message ai-message-assistant">${answer}</div>`);
+      history.scrollTop = history.scrollHeight;
+    }
+
+    function getAiAnswer(question) {
+      const text = question.toLowerCase();
+      if (text.includes('project') || text.includes('tbef') || text.includes('rainfall')) return 'Avinash is building TBEF, a transformer-based ensemble framework for sub-seasonal extreme rainfall prediction over India using PatchTST, BiLSTM, TCN, XGBoost, ERA5, IMD rainfall data, and SRTM topography. He also built the INNOGENESIS 2026 event platform and this Tahoe portfolio desktop.';
+      if (text.includes('skill') || text.includes('stack') || text.includes('technology')) return 'His stack includes Python, PyTorch, Scikit-learn, TensorFlow, JavaScript, React, Tailwind CSS, Node.js, Git, Linux, XGBoost, and LightGBM.';
+      if (text.includes('education') || text.includes('college') || text.includes('study')) return 'Pamarthi Avinash is a B.Tech final-year Electronics and Communication Engineering student at SRKR Engineering College.';
+      if (text.includes('contact') || text.includes('email') || text.includes('reach')) return 'You can reach Avinash at avinashcreates@gmail.com, or visit github.com/avinashcreates and linkedin.com/in/avinashpamarthi.';
+      if (text.includes('who') || text.includes('about') || text.includes('avinash')) return 'Pamarthi Avinash is an AI/ML researcher and web developer focused on rainfall prediction research, useful web products, and thoughtful interactive interfaces.';
+      return 'I can answer questions about Avinash, his projects, AI/ML and web skills, education, or contact links. Try asking: “What projects has Avinash built?”';
+    }
+
     const systemAppTabOrder = [];
     let activeSystemAppTab = '';
 
